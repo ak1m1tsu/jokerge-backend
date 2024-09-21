@@ -13,7 +13,7 @@ definitions:
     type: object
   internal_app_api.OrderListItem:
     properties:
-      client:
+      customer:
         $ref: '#/definitions/internal_app_api.CustomerItem'
       id:
         type: string

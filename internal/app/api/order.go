@@ -110,9 +110,7 @@ func (e *Env) OrderGet(ctx *fiber.Ctx) error {
 //	@Success	200	{object}	map[string]string
 //	@Router		/order/ [post]
 func (e *Env) OrderCreate(ctx *fiber.Ctx) error {
-	return ctx.JSON(map[string]string{
-		"status": "OK",
-	})
+	return e.OK(ctx)
 }
 
 // OrderUpdate обновление инфорамации заказа
@@ -124,7 +122,5 @@ func (e *Env) OrderCreate(ctx *fiber.Ctx) error {
 //	@Success	200	{object}	map[string]string
 //	@Router		/order/update [post]
 func (e *Env) OrderUpdate(ctx *fiber.Ctx) error {
-	return ctx.JSON(map[string]string{
-		"status": "OK",
-	})
+	return e.OK(ctx)
 }

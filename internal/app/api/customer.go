@@ -86,28 +86,25 @@ func (e *Env) CustomerList(ctx *fiber.Ctx) error {
 //	@Success	200	{object}	CustomerItem
 //	@Router		/customer/{customer_id} [get]
 func (e *Env) CustomerGet(ctx *fiber.Ctx) error {
-	customer := types.Customer{
-		ID:        "7dfa4d19-d4c8-4596-bcb7-249e0de951bc",
-		FirstName: "Инесса",
-		LastName:  "Химченко",
-		Address:   "164505, г. Дятьково, ул. Белоостровская (Выборгский), дом 59, квартира 24",
-	}
-	orders := []types.Order{
-		{
-			ID:         "2bb7d14a-d98a-41ce-a0bc-764798672776",
-			CustomerID: "7dfa4d19-d4c8-4596-bcb7-249e0de951bc",
-			Status:     types.OrderStatusCanceled,
-			CreatedAt:  time.Now(),
-		},
-		{
-			ID:         "bd512907-11ec-402d-a05a-7c9d147e23ef",
-			CustomerID: "7dfa4d19-d4c8-4596-bcb7-249e0de951bc",
-			Status:     types.OrderStatusActive,
-			CreatedAt:  time.Now(),
-		},
+	id := ctx.Params("id")
+
+	customer, err := e.Service().GetCustomerInfo(ctx.Context(), id)
+	if err != nil {
+		return err
 	}
 
-	return ctx.JSON(FillCustomerListItem(customer, orders))
+	if customer == nil {
+		return e.NotFound(ctx)
+	}
+
+	orders, err := e.Service().GetCustomerOrders(ctx.Context(), id)
+	if err != nil {
+		return err
+	}
+
+	result := FillCustomerListItem(*customer, orders)
+
+	return ctx.JSON(result)
 }
 
 // CustomerCreate создает клиента
@@ -119,7 +116,5 @@ func (e *Env) CustomerGet(ctx *fiber.Ctx) error {
 //	@Success	200	{object}	map[string]string
 //	@Router		/customer/ [post]
 func (e *Env) CustomerCreate(ctx *fiber.Ctx) error {
-	return ctx.JSON(map[string]string{
-		"status": "OK",
-	})
+	return e.OK(ctx)
 }
