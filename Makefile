@@ -6,9 +6,9 @@ run:
 api:
 	go build -o bin/api ./cmd/app
 
-.PHONY: config-syncer
-config-syncer:
-	go build -o bin/config-syncer ./cmd/config-syncer
+.PHONY: admin 
+admin:
+	go build -o bin/admin ./cmd/admin
 
 .PHONY: doc
 doc:

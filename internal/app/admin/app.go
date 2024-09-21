@@ -1,4 +1,4 @@
-package configsyncer
+package admin
 
 import "github.com/gofiber/fiber/v2"
 
