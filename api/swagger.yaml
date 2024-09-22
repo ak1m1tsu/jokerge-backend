@@ -20,6 +20,13 @@ definitions:
       status:
         type: string
     type: object
+  internal_app_api.Response:
+    properties:
+      error:
+        type: string
+      status:
+        type: string
+    type: object
   internal_app_api.UserInfoItem:
     properties:
       email:
@@ -64,9 +71,15 @@ paths:
         "200":
           description: OK
           schema:
-            additionalProperties:
-              type: string
-            type: object
+            $ref: '#/definitions/internal_app_api.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/internal_app_api.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/internal_app_api.Response'
       summary: создание нового клиента
       tags:
       - customers
@@ -81,6 +94,14 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/internal_app_api.CustomerItem'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/internal_app_api.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/internal_app_api.Response'
       summary: информация о клиенте
       tags:
       - customers
@@ -95,6 +116,10 @@ paths:
             items:
               $ref: '#/definitions/internal_app_api.CustomerItem'
             type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/internal_app_api.Response'
       summary: список клиентов
       tags:
       - customers
@@ -108,9 +133,15 @@ paths:
         "200":
           description: OK
           schema:
-            additionalProperties:
-              type: string
-            type: object
+            $ref: '#/definitions/internal_app_api.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/internal_app_api.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/internal_app_api.Response'
       summary: создаение заказа
       tags:
       - orders
@@ -123,6 +154,14 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/internal_app_api.OrderListItem'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/internal_app_api.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/internal_app_api.Response'
       summary: информация о заказе
       tags:
       - orders
@@ -137,6 +176,10 @@ paths:
             items:
               $ref: '#/definitions/internal_app_api.OrderListItem'
             type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/internal_app_api.Response'
       summary: список заказов
       tags:
       - orders
@@ -150,9 +193,15 @@ paths:
         "200":
           description: OK
           schema:
-            additionalProperties:
-              type: string
-            type: object
+            $ref: '#/definitions/internal_app_api.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/internal_app_api.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/internal_app_api.Response'
       tags:
       - orders
 swagger: "2.0"

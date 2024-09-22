@@ -81,15 +81,11 @@ func (e *Env) Service() *service.Service {
 }
 
 func (e *Env) NotFound(ctx *fiber.Ctx) error {
-	return ctx.Status(http.StatusNotFound).JSON(map[string]string{
-		"error": "not found",
-	})
+	return ctx.Status(http.StatusNotFound).JSON(Response{Error: "not found"})
 }
 
 func (e *Env) OK(ctx *fiber.Ctx) error {
-	return ctx.Status(http.StatusOK).JSON(map[string]string{
-		"status": "ok",
-	})
+	return ctx.Status(http.StatusOK).JSON(Response{Status: "ok"})
 }
 
 func (e *Env) Authorizer(email, pass string) bool {
@@ -105,13 +101,11 @@ func HandleError(ctx *fiber.Ctx, err error) error {
 	}
 
 	switch code {
+	case http.StatusMethodNotAllowed:
+		return ctx.Status(code).JSON(Response{Error: "method not allowed"})
 	case http.StatusNotFound:
-		return ctx.Status(code).JSON(map[string]string{
-			"error": "not found",
-		})
+		return ctx.Status(code).JSON(Response{Error: "not found"})
 	default:
-		return ctx.Status(code).JSON(map[string]string{
-			"error": "internval",
-		})
+		return ctx.Status(code).JSON(Response{Error: "internal"})
 	}
 }

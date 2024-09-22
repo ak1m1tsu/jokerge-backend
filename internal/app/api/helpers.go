@@ -4,7 +4,7 @@ import (
 	"github.com/ak1m1tsu/jokerge/internal/pkg/types"
 )
 
-func FillCustomerItem(customer types.Customer) CustomerItem {
+func FillCustomerItem(customer *types.Customer) CustomerItem {
 	return CustomerItem{
 		ID:        customer.ID,
 		FirstName: customer.FirstName,
@@ -13,14 +13,14 @@ func FillCustomerItem(customer types.Customer) CustomerItem {
 	}
 }
 
-func FillCustomerListItem(customer types.Customer, orders []types.Order) CustomerListItem {
+func FillCustomerListItem(customer *types.Customer, orders []types.Order) CustomerListItem {
 	result := CustomerListItem{
 		CustomerItem: FillCustomerItem(customer),
 		Orders:       make([]OrderItem, 0, len(orders)),
 	}
 
 	for _, order := range orders {
-		result.Orders = append(result.Orders, FillOrderItem(order))
+		result.Orders = append(result.Orders, FillOrderItem(&order))
 	}
 
 	return result
@@ -44,20 +44,20 @@ func FillCustomerList(customers []types.Customer, orders []types.Order) Customer
 	}
 
 	for _, cwo := range customersWithOrders {
-		result = append(result, FillCustomerListItem(cwo.Customer, cwo.Orders))
+		result = append(result, FillCustomerListItem(&cwo.Customer, cwo.Orders))
 	}
 
 	return result
 }
 
-func FillOrderItem(order types.Order) OrderItem {
+func FillOrderItem(order *types.Order) OrderItem {
 	return OrderItem{
 		ID:     order.ID,
 		Status: order.Status.String(),
 	}
 }
 
-func FillOrderListItem(order types.Order, customer types.Customer) OrderListItem {
+func FillOrderListItem(order *types.Order, customer *types.Customer) OrderListItem {
 	return OrderListItem{
 		OrderItem: FillOrderItem(order),
 		Customer:  FillCustomerItem(customer),
@@ -83,20 +83,20 @@ func FillOrderList(orders []types.Order, customers []types.Customer) OrderList {
 
 	for _, cwo := range customersWithOrders {
 		for _, order := range cwo.Orders {
-			result = append(result, FillOrderListItem(order, cwo.Customer))
+			result = append(result, FillOrderListItem(&order, &cwo.Customer))
 		}
 	}
 
 	return result
 }
 
-func FillCustomerOrdersItem(customer types.Customer, orders []types.Order) CustomerOrdersItem {
+func FillCustomerOrdersItem(customer *types.Customer, orders []types.Order) CustomerOrdersItem {
 	result := CustomerOrdersItem{
 		Customer: FillCustomerItem(customer),
 		Orders:   make(OrderList, 0, len(orders)),
 	}
 	for _, order := range orders {
-		result.Orders = append(result.Orders, FillOrderListItem(order, customer))
+		result.Orders = append(result.Orders, FillOrderListItem(&order, customer))
 	}
 	return result
 }
