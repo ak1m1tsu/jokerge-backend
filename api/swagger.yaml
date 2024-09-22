@@ -20,6 +20,17 @@ definitions:
       status:
         type: string
     type: object
+  internal_app_api.UserInfoItem:
+    properties:
+      email:
+        type: string
+      first_name:
+        type: string
+      id:
+        type: string
+      last_name:
+        type: string
+    type: object
 externalDocs:
   description: OpenAPI
   url: https://swagger.io/resources/open-api/
@@ -29,7 +40,21 @@ info:
   title: jokerge
   version: "1.0"
 paths:
-  /customer/:
+  /api/auth:
+    post:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/internal_app_api.UserInfoItem'
+      summary: валидация пользовательских данных
+      tags:
+      - auth
+  /api/v1/customer:
     post:
       consumes:
       - application/json
@@ -45,7 +70,7 @@ paths:
       summary: создание клиентаs
       tags:
       - customers
-  /customer/{customer_id}:
+  /api/v1/customer/{customer_id}:
     get:
       consumes:
       - application/json
@@ -59,7 +84,7 @@ paths:
       summary: информация о клиенте
       tags:
       - customers
-  /customer/list:
+  /api/v1/customer/list:
     get:
       produces:
       - application/json
@@ -73,7 +98,7 @@ paths:
       summary: список клиентов
       tags:
       - customers
-  /order/:
+  /api/v1/order:
     post:
       consumes:
       - application/json
@@ -89,7 +114,7 @@ paths:
       summary: создаение заказа
       tags:
       - orders
-  /order/{order_id}:
+  /api/v1/order/{order_id}:
     get:
       produces:
       - application/json
@@ -101,7 +126,7 @@ paths:
       summary: информация о заказе
       tags:
       - orders
-  /order/list:
+  /api/v1/order/list:
     get:
       produces:
       - application/json
@@ -115,7 +140,7 @@ paths:
       summary: список заказов
       tags:
       - orders
-  /order/update:
+  /api/v1/order/update:
     post:
       consumes:
       - application/json

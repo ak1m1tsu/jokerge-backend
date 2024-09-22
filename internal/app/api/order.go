@@ -13,7 +13,7 @@ import (
 //	@Tags		orders
 //	@Produce	json
 //	@Success	200	{object}	OrderList
-//	@Router		/order/list [get]
+//	@Router		/api/v1/order/list [get]
 func (e *Env) OrderList(ctx *fiber.Ctx) error {
 	orders := []types.Order{
 		{
@@ -83,7 +83,7 @@ func (e *Env) OrderList(ctx *fiber.Ctx) error {
 //	@Tags		orders
 //	@Produce	json
 //	@Success	200	{object}	OrderListItem
-//	@Router		/order/{order_id} [get]
+//	@Router		/api/v1/order/{order_id} [get]
 func (e *Env) OrderGet(ctx *fiber.Ctx) error {
 	return ctx.JSON(FillOrderListItem(
 		types.Order{
@@ -108,7 +108,7 @@ func (e *Env) OrderGet(ctx *fiber.Ctx) error {
 //	@Accept		json
 //	@Produce	json
 //	@Success	200	{object}	map[string]string
-//	@Router		/order/ [post]
+//	@Router		/api/v1/order [post]
 func (e *Env) OrderCreate(ctx *fiber.Ctx) error {
 	return e.OK(ctx)
 }
@@ -120,7 +120,7 @@ func (e *Env) OrderCreate(ctx *fiber.Ctx) error {
 //	@Accept		json
 //	@Produce	json
 //	@Success	200	{object}	map[string]string
-//	@Router		/order/update [post]
+//	@Router		/api/v1/order/update [post]
 func (e *Env) OrderUpdate(ctx *fiber.Ctx) error {
 	return e.OK(ctx)
 }

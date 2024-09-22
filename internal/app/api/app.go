@@ -7,6 +7,7 @@ import (
 
 	"github.com/ak1m1tsu/jokerge/internal/pkg/middleware"
 	"github.com/ak1m1tsu/jokerge/internal/pkg/service"
+	"github.com/bytedance/sonic"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/basicauth"
 	"github.com/gofiber/fiber/v2/middleware/cors"
@@ -34,6 +35,8 @@ func New() *Env {
 			WriteTimeout: time.Second * 5,
 			IdleTimeout:  time.Second * 30,
 			ErrorHandler: HandleError,
+			JSONEncoder:  sonic.Marshal,
+			JSONDecoder:  sonic.Unmarshal,
 		}),
 		srv: service.New(),
 	}
@@ -42,17 +45,16 @@ func New() *Env {
 
 	api.Use(middleware.RequestID())
 	api.Use(middleware.Logger())
-	// api.Use(logger.New(logger.Config{
-	// 	TimeFormat: time.RFC3339,
-	// 	TimeZone:   time.UTC.String(),
-	// }))
 	api.Use(cors.New())
-	api.Use(basicauth.New(basicauth.Config{
+
+	auth := api.Group("/auth")
+	auth.Post("/", env.ValidateUserCredentials)
+
+	v1 := api.Group("/v1")
+	v1.Use(basicauth.New(basicauth.Config{
 		Realm:      "Forbidden",
 		Authorizer: env.Authorizer,
 	}))
-
-	v1 := api.Group("/v1")
 
 	v1.Route("/order", func(router fiber.Router) {
 		router.Get("/list", env.OrderList)

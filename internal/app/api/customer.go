@@ -13,7 +13,7 @@ import (
 //	@Tags		customers
 //	@Produce	json
 //	@Success	200	{object}	[]CustomerItem
-//	@Router		/customer/list [get]
+//	@Router		/api/v1/customer/list [get]
 func (e *Env) CustomerList(ctx *fiber.Ctx) error {
 	orders := []types.Order{
 		{
@@ -84,7 +84,7 @@ func (e *Env) CustomerList(ctx *fiber.Ctx) error {
 //	@Produce	json
 //	@Accept		json
 //	@Success	200	{object}	CustomerItem
-//	@Router		/customer/{customer_id} [get]
+//	@Router		/api/v1/customer/{customer_id} [get]
 func (e *Env) CustomerGet(ctx *fiber.Ctx) error {
 	id := ctx.Params("id")
 
@@ -114,7 +114,7 @@ func (e *Env) CustomerGet(ctx *fiber.Ctx) error {
 //	@Accept		json
 //	@Produce	json
 //	@Success	200	{object}	map[string]string
-//	@Router		/customer/ [post]
+//	@Router		/api/v1/customer [post]
 func (e *Env) CustomerCreate(ctx *fiber.Ctx) error {
 	return e.OK(ctx)
 }
