@@ -10,8 +10,9 @@ import (
 //	@Summary	список заказов
 //	@Tags		orders
 //	@Produce	json
-//	@Success	200	{object}	OrderList
-//	@Failure	500 {object}	Response
+//	@Param		X-Request-ID	header		string	true	"ID запроса"
+//	@Success	200				{object}	OrderList
+//	@Failure	500				{object}	Response
 //	@Router		/api/v1/order/list [get]
 func (e *Env) OrderList(ctx *fiber.Ctx) error {
 	orders, err := e.Service().GetOrders(ctx.Context())
@@ -36,9 +37,11 @@ func (e *Env) OrderList(ctx *fiber.Ctx) error {
 //	@Summary	информация о заказе
 //	@Tags		orders
 //	@Produce	json
-//	@Success	200	{object}	OrderListItem
-//	@Failure	404 {object}	Response
-//	@Failure	500 {object}	Response
+//	@Param		order_id		path		string	true	"ID заказа"
+//	@Param		X-Request-ID	header		string	true	"ID запроса"
+//	@Success	200				{object}	OrderListItem
+//	@Failure	404				{object}	Response
+//	@Failure	500				{object}	Response
 //	@Router		/api/v1/order/{order_id} [get]
 func (e *Env) OrderGet(ctx *fiber.Ctx) error {
 	id := ctx.Params("id")
@@ -66,9 +69,10 @@ func (e *Env) OrderGet(ctx *fiber.Ctx) error {
 //	@Tags		orders
 //	@Accept		json
 //	@Produce	json
-//	@Success	200	{object}	Response
-//	@Failure	400 {object}	Response
-//	@Failure	500 {object}	Response
+//	@Param		X-Request-ID	header		string	true	"ID запроса"
+//	@Success	200				{object}	Response
+//	@Failure	400				{object}	Response
+//	@Failure	500				{object}	Response
 //	@Router		/api/v1/order [post]
 func (e *Env) OrderCreate(ctx *fiber.Ctx) error {
 	return e.OK(ctx)
@@ -80,9 +84,10 @@ func (e *Env) OrderCreate(ctx *fiber.Ctx) error {
 //	@Tags		orders
 //	@Accept		json
 //	@Produce	json
-//	@Success	200	{object}	Response
-//	@Failure	400 {object}	Response
-//	@Failure	500 {object}	Response
+//	@Param		X-Request-ID	header		string	true	"ID запроса"
+//	@Success	200				{object}	Response
+//	@Failure	400				{object}	Response
+//	@Failure	500				{object}	Response
 //	@Router		/api/v1/order/update [post]
 func (e *Env) OrderUpdate(ctx *fiber.Ctx) error {
 	return e.OK(ctx)

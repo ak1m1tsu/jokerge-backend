@@ -1,4 +1,4 @@
-basePath: /api/v1
+basePath: /
 definitions:
   internal_app_api.CustomerItem:
     properties:
@@ -38,6 +38,13 @@ definitions:
       last_name:
         type: string
     type: object
+  internal_app_api.ValidateUserReq:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    type: object
 externalDocs:
   description: OpenAPI
   url: https://swagger.io/resources/open-api/
@@ -51,6 +58,18 @@ paths:
     post:
       consumes:
       - application/json
+      parameters:
+      - description: Тело запроса
+        in: body
+        name: Request
+        required: true
+        schema:
+          $ref: '#/definitions/internal_app_api.ValidateUserReq'
+      - description: ID запроса
+        in: header
+        name: X-Request-ID
+        required: true
+        type: string
       produces:
       - application/json
       responses:
@@ -65,6 +84,12 @@ paths:
     post:
       consumes:
       - application/json
+      parameters:
+      - description: ID запроса
+        in: header
+        name: X-Request-ID
+        required: true
+        type: string
       produces:
       - application/json
       responses:
@@ -87,6 +112,17 @@ paths:
     get:
       consumes:
       - application/json
+      parameters:
+      - description: ID клиента
+        in: path
+        name: customer_id
+        required: true
+        type: string
+      - description: ID запроса
+        in: header
+        name: X-Request-ID
+        required: true
+        type: string
       produces:
       - application/json
       responses:
@@ -107,6 +143,12 @@ paths:
       - customers
   /api/v1/customer/list:
     get:
+      parameters:
+      - description: ID запроса
+        in: header
+        name: X-Request-ID
+        required: true
+        type: string
       produces:
       - application/json
       responses:
@@ -127,6 +169,12 @@ paths:
     post:
       consumes:
       - application/json
+      parameters:
+      - description: ID запроса
+        in: header
+        name: X-Request-ID
+        required: true
+        type: string
       produces:
       - application/json
       responses:
@@ -147,6 +195,17 @@ paths:
       - orders
   /api/v1/order/{order_id}:
     get:
+      parameters:
+      - description: ID заказа
+        in: path
+        name: order_id
+        required: true
+        type: string
+      - description: ID запроса
+        in: header
+        name: X-Request-ID
+        required: true
+        type: string
       produces:
       - application/json
       responses:
@@ -167,6 +226,12 @@ paths:
       - orders
   /api/v1/order/list:
     get:
+      parameters:
+      - description: ID запроса
+        in: header
+        name: X-Request-ID
+        required: true
+        type: string
       produces:
       - application/json
       responses:
@@ -187,6 +252,12 @@ paths:
     post:
       consumes:
       - application/json
+      parameters:
+      - description: ID запроса
+        in: header
+        name: X-Request-ID
+        required: true
+        type: string
       produces:
       - application/json
       responses:

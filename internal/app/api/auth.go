@@ -18,7 +18,9 @@ type ValidateUserReq struct {
 //	@Tags		auth
 //	@Accept		json
 //	@Produce	json
-//	@Success	200	{object}	UserInfoItem
+//	@Param		Request			body		ValidateUserReq	true	"Тело запроса"
+//	@Param		X-Request-ID	header		string			true	"ID запроса"
+//	@Success	200				{object}	UserInfoItem
 //	@Router		/api/auth [post]
 func (e *Env) ValidateUserCredentials(ctx *fiber.Ctx) error {
 	req := new(ValidateUserReq)

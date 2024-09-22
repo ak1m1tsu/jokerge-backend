@@ -20,7 +20,7 @@ import (
 //	@version	1.0
 
 //	@host		localhost:8000
-//	@BasePath	/api/v1
+//	@BasePath	/
 
 //	@externalDocs.description	OpenAPI
 //	@externalDocs.url			https://swagger.io/resources/open-api/

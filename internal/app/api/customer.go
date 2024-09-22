@@ -10,8 +10,9 @@ import (
 //	@Summary	список клиентов
 //	@Tags		customers
 //	@Produce	json
-//	@Success	200	{object}	[]CustomerItem
-//	@Failure	500 {object}	Response
+//	@Param		X-Request-ID	header		string	true	"ID запроса"
+//	@Success	200				{object}	[]CustomerItem
+//	@Failure	500				{object}	Response
 //	@Router		/api/v1/customer/list [get]
 func (e *Env) CustomerList(ctx *fiber.Ctx) error {
 	customers, err := e.Service().GetCustomers(ctx.Context())
@@ -37,9 +38,11 @@ func (e *Env) CustomerList(ctx *fiber.Ctx) error {
 //	@Tags		customers
 //	@Produce	json
 //	@Accept		json
-//	@Success	200	{object}	CustomerItem
-//	@Failure	404 {object}	Response
-//	@Failure	500 {object}	Response
+//	@Param		customer_id		path		string	true	"ID клиента"
+//	@Param		X-Request-ID	header		string	true	"ID запроса"
+//	@Success	200				{object}	CustomerItem
+//	@Failure	404				{object}	Response
+//	@Failure	500				{object}	Response
 //	@Router		/api/v1/customer/{customer_id} [get]
 func (e *Env) CustomerGet(ctx *fiber.Ctx) error {
 	id := ctx.Params("id")
@@ -71,9 +74,10 @@ func (e *Env) CustomerGet(ctx *fiber.Ctx) error {
 //	@Tags		customers
 //	@Accept		json
 //	@Produce	json
-//	@Success	200	{object}	Response
-//	@Failure	400 {object}	Response
-//	@Failure	500 {object}	Response
+//	@Param		X-Request-ID	header		string	true	"ID запроса"
+//	@Success	200				{object}	Response
+//	@Failure	400				{object}	Response
+//	@Failure	500				{object}	Response
 //	@Router		/api/v1/customer [post]
 func (e *Env) CustomerCreate(ctx *fiber.Ctx) error {
 	return e.OK(ctx)
