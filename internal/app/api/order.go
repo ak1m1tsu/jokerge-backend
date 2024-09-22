@@ -16,13 +16,13 @@ import (
 func (e *Env) OrderList(ctx *fiber.Ctx) error {
 	orders, err := e.Service().GetOrders(ctx.Context())
 	if err != nil {
-		zerolog.Ctx(ctx.Context()).Error().Err(err).Msg("failed to get orders")
+		zerolog.Ctx(ctx.UserContext()).Error().Err(err).Msg("failed to get orders")
 		return err
 	}
 
 	customers, err := e.Service().GetCustomers(ctx.Context())
 	if err != nil {
-		zerolog.Ctx(ctx.Context()).Error().Err(err).Msg("failed to get customers")
+		zerolog.Ctx(ctx.UserContext()).Error().Err(err).Msg("failed to get customers")
 		return err
 	}
 
@@ -45,13 +45,13 @@ func (e *Env) OrderGet(ctx *fiber.Ctx) error {
 
 	order, err := e.Service().GetOrderInfo(ctx.Context(), id)
 	if err != nil {
-		zerolog.Ctx(ctx.Context()).Error().Err(err).Msgf("failed to get order by id %s", id)
+		zerolog.Ctx(ctx.UserContext()).Error().Err(err).Msgf("failed to get order by id %s", id)
 		return err
 	}
 
 	customer, err := e.Service().GetCustomerInfo(ctx.Context(), order.CustomerID)
 	if err != nil {
-		zerolog.Ctx(ctx.Context()).Error().Err(err).Msgf("failed to get customer by id %s", order.CustomerID)
+		zerolog.Ctx(ctx.UserContext()).Error().Err(err).Msgf("failed to get customer by id %s", order.CustomerID)
 		return err
 	}
 

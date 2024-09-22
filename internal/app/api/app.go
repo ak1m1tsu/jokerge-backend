@@ -1,16 +1,19 @@
 package api
 
 import (
+	"context"
 	"errors"
 	"net/http"
 	"time"
 
 	"github.com/ak1m1tsu/jokerge/internal/pkg/middleware"
 	"github.com/ak1m1tsu/jokerge/internal/pkg/service"
+	"github.com/ak1m1tsu/jokerge/internal/pkg/types"
 	"github.com/bytedance/sonic"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/basicauth"
 	"github.com/gofiber/fiber/v2/middleware/cors"
+	"github.com/google/uuid"
 )
 
 //	@title		jokerge
@@ -27,8 +30,13 @@ type Env struct {
 	srv *service.Service
 }
 
-func New() *Env {
-	env := Env{
+func New() (*Env, error) {
+	srv, err := service.New()
+	if err != nil {
+		return nil, err
+	}
+
+	env := &Env{
 		app: fiber.New(fiber.Config{
 			ServerHeader: "X-Server",
 			ReadTimeout:  time.Second * 5,
@@ -38,7 +46,11 @@ func New() *Env {
 			JSONEncoder:  sonic.Marshal,
 			JSONDecoder:  sonic.Unmarshal,
 		}),
-		srv: service.New(),
+		srv: srv,
+	}
+
+	if err = env.SeedData(); err != nil {
+		return nil, err
 	}
 
 	api := env.app.Group("/api")
@@ -69,7 +81,7 @@ func New() *Env {
 		router.Post("/", env.CustomerCreate)
 	})
 
-	return &env
+	return env, nil
 }
 
 func (e *Env) Run() error {
@@ -90,6 +102,30 @@ func (e *Env) OK(ctx *fiber.Ctx) error {
 
 func (e *Env) Authorizer(email, pass string) bool {
 	return true
+}
+
+func (e *Env) SeedData() error {
+	var (
+		err error
+		ctx = context.Background()
+	)
+
+	if _, err = e.Service().DB().NewCreateTable().Model((*types.User)(nil)).Exec(ctx); err != nil {
+		return err
+	}
+
+	user := &types.User{
+		ID:        uuid.NewString(),
+		Email:     "admin@admin.com",
+		Password:  "SuperPassword",
+		FirstName: "Иван",
+		LastName:  "Иванов",
+	}
+	if _, err = e.Service().DB().NewInsert().Model(user).Exec(ctx); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func HandleError(ctx *fiber.Ctx, err error) error {

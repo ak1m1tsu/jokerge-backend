@@ -4,7 +4,7 @@ import "time"
 
 // Order заказ клиента
 type Order struct {
-	ID         string
+	ID         string `bun:",pk"`
 	CustomerID string
 	Status     OrderStatus
 	CreatedAt  time.Time

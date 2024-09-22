@@ -7,7 +7,9 @@ import (
 )
 
 func main() {
-	if err := api.New().Run(); err != nil {
+	if app, err := api.New(); err != nil {
 		log.Println(err.Error())
+	} else {
+		log.Println(app.Run())
 	}
 }

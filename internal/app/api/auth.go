@@ -23,21 +23,24 @@ type ValidateUserReq struct {
 func (e *Env) ValidateUserCredentials(ctx *fiber.Ctx) error {
 	req := new(ValidateUserReq)
 	if err := ctx.BodyParser(req); err != nil {
-		zerolog.Ctx(ctx.Context()).Error().Err(err).Msg("failed to parse request body")
+		zerolog.Ctx(ctx.UserContext()).Error().Err(err).Msg("failed to parse request body")
 		return err
 	}
 
 	uinfo, ok, err := e.Service().ValidateUser(ctx.Context(), req.Email, req.Password)
 	if err != nil {
-		zerolog.Ctx(ctx.Context()).Error().Err(err).Msg("failed to validate user credentials")
+		zerolog.Ctx(ctx.UserContext()).Error().Err(err).Msg("failed to validate user credentials")
 		return err
 	}
 
 	if !ok {
-		return ctx.Status(http.StatusForbidden).JSON(map[string]string{
-			"error": "invalid credentials",
-		})
+		return ctx.Status(http.StatusForbidden).JSON(Response{Error: "invalid credentials"})
 	}
 
-	return ctx.JSON(uinfo)
+	return ctx.JSON(UserInfoItem{
+		ID:        uinfo.ID,
+		Email:     uinfo.Email,
+		FirstName: uinfo.FirstName,
+		LastName:  uinfo.LastName,
+	})
 }

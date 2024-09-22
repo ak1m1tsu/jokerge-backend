@@ -16,13 +16,13 @@ import (
 func (e *Env) CustomerList(ctx *fiber.Ctx) error {
 	customers, err := e.Service().GetCustomers(ctx.Context())
 	if err != nil {
-		zerolog.Ctx(ctx.Context()).Error().Err(err).Msg("failed to get customer list")
+		zerolog.Ctx(ctx.UserContext()).Error().Err(err).Msg("failed to get customer list")
 		return err
 	}
 
 	orders, err := e.Service().GetOrders((ctx.Context()))
 	if err != nil {
-		zerolog.Ctx(ctx.Context()).Error().Err(err).Msg("failed to get order list")
+		zerolog.Ctx(ctx.UserContext()).Error().Err(err).Msg("failed to get order list")
 		return err
 	}
 
