@@ -67,7 +67,7 @@ paths:
             additionalProperties:
               type: string
             type: object
-      summary: создание клиентаs
+      summary: создание нового клиента
       tags:
       - customers
   /api/v1/customer/{customer_id}:

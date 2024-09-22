@@ -109,7 +109,7 @@ func (e *Env) CustomerGet(ctx *fiber.Ctx) error {
 
 // CustomerCreate создает клиента
 //
-//	@Summary	создание клиентаs
+//	@Summary	создание нового клиента
 //	@Tags		customers
 //	@Accept		json
 //	@Produce	json
