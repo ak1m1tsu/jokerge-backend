@@ -2,14 +2,15 @@ package types
 
 // Customer пользователь, который оформляет заказы
 type Customer struct {
-	ID        string `json:"id" bun:",pk"`
-	FirstName string `json:"first_name"`
-	LastName  string `json:"last_name"`
-	Address   string `json:"address"`
+	ID        string `bun:",pk"`
+	FirstName string
+	LastName  string
+	Address   string
+	Orders    []Order `bun:"rel:has-many"`
 }
 
 // Client пользователь и его история заказов
 type CustomerWithOrders struct {
-	Customer `json:"client" bun:"rel:belongs-to,join:customer_id=id"`
-	Orders   []Order `json:"orders" bun:"rel:has-many,join:id=order_id"`
+	Customer `bun:"rel:belongs-to"`
+	Orders   []Order `bun:"rel:has-many"`
 }

@@ -52,9 +52,9 @@ func (e *Env) OrderGet(ctx *fiber.Ctx) error {
 		return err
 	}
 
-	customer, err := e.Service().GetCustomerInfo(ctx.Context(), order.CustomerID)
+	customer, err := e.Service().GetCustomerInfo(ctx.Context(), id)
 	if err != nil {
-		zerolog.Ctx(ctx.UserContext()).Error().Err(err).Msgf("failed to get customer by id %s", order.CustomerID)
+		zerolog.Ctx(ctx.UserContext()).Error().Err(err).Msgf("failed to get customer by id %s", id)
 		return err
 	}
 

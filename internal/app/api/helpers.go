@@ -38,7 +38,7 @@ func FillCustomerList(customers []types.Customer, orders []types.Order) Customer
 	}
 
 	for _, order := range orders {
-		if cwo, found := customersWithOrders[order.CustomerID]; found {
+		if cwo, found := customersWithOrders[order.OrderID]; found {
 			cwo.Orders = append(cwo.Orders, order)
 		}
 	}
@@ -52,7 +52,7 @@ func FillCustomerList(customers []types.Customer, orders []types.Order) Customer
 
 func FillOrderItem(order *types.Order) OrderItem {
 	return OrderItem{
-		ID:     order.ID,
+		ID:     order.OrderID,
 		Status: order.Status.String(),
 	}
 }
@@ -76,7 +76,7 @@ func FillOrderList(orders []types.Order, customers []types.Customer) OrderList {
 	}
 
 	for _, order := range orders {
-		if cwo, found := customersWithOrders[order.CustomerID]; found {
+		if cwo, found := customersWithOrders[order.OrderID]; found {
 			cwo.Orders = append(cwo.Orders, order)
 		}
 	}

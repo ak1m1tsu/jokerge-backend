@@ -4,10 +4,19 @@ import "time"
 
 // Order заказ клиента
 type Order struct {
-	ID         string `bun:",pk"`
-	CustomerID string
-	Status     OrderStatus
-	CreatedAt  time.Time
+	OrderID   string     `bun:",pk"`
+	Customer  *Customer  `bun:"rel:belongs-to"`
+	Products  OrderItems `bun:"rel:has-many"`
+	Status    OrderStatus
+	Price     int
+	CreatedAt time.Time
+}
+
+type OrderItems []OrderItem
+
+type OrderItem struct {
+	Product
+	Count int
 }
 
 // OrderStatus статус заказа
