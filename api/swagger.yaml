@@ -16,7 +16,7 @@ definitions:
       customer:
         $ref: '#/definitions/internal_app_api.CustomerItem'
       id:
-        type: string
+        type: integer
       status:
         type: string
     type: object
