@@ -5,7 +5,7 @@ type (
 	CustomerList []CustomerListItem
 
 	OrderItem struct {
-		ID     string `json:"id"`
+		ID     int    `json:"id"`
 		Status string `json:"status"`
 	}
 	CustomerItem struct {

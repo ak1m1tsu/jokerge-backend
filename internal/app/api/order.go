@@ -21,15 +21,7 @@ func (e *Env) OrderList(ctx *fiber.Ctx) error {
 		return err
 	}
 
-	customers, err := e.Service().GetCustomers(ctx.Context())
-	if err != nil {
-		zerolog.Ctx(ctx.UserContext()).Error().Err(err).Msg("failed to get customers")
-		return err
-	}
-
-	result := FillOrderList(orders, customers)
-
-	return ctx.JSON(result)
+	return ctx.JSON(orders)
 }
 
 // OrderGet информация о заказе
@@ -52,15 +44,11 @@ func (e *Env) OrderGet(ctx *fiber.Ctx) error {
 		return err
 	}
 
-	customer, err := e.Service().GetCustomerInfo(ctx.Context(), id)
-	if err != nil {
-		zerolog.Ctx(ctx.UserContext()).Error().Err(err).Msgf("failed to get customer by id %s", id)
-		return err
+	if order == nil {
+		return e.NotFound(ctx)
 	}
 
-	result := FillOrderListItem(order, customer)
-
-	return ctx.JSON(result)
+	return ctx.JSON(order)
 }
 
 // OrderCreate создаение заказа

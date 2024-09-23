@@ -1,6 +1,8 @@
 package types
 
 import (
+	"time"
+
 	"github.com/uptrace/bun"
 )
 
@@ -33,6 +35,20 @@ type CustomerModel struct {
 	Orders    []OrderModel `bun:"rel:has-many,join:id=customer_id"`
 }
 
+func (m CustomerModel) ToCustomer() *Customer {
+	c := &Customer{
+		CustomerBase: CustomerBase{
+			ID:        m.ID,
+			FirstName: m.FirstName,
+			LastName:  m.LastName,
+			Address:   m.Address,
+		},
+		Orders: make([]Order, 0),
+	}
+
+	return c
+}
+
 type OrderModel struct {
 	bun.BaseModel `bun:"table:orders,alias:o"`
 
@@ -43,6 +59,40 @@ type OrderModel struct {
 	Status     OrderStatus
 	Price      int
 	CreatedAt  int64
+}
+
+func (m OrderModel) ToOrder() *Order {
+	o := &Order{
+		OrderBase: OrderBase{
+			ID:        m.ID,
+			Status:    m.Status,
+			Price:     m.Price,
+			CreatedAt: time.Unix(m.CreatedAt, 0),
+		},
+		Products: make([]Product, 0),
+	}
+
+	return o
+}
+
+func (m OrderModel) ToOrderWithCustomer() *OrderWithCustomer {
+	return &OrderWithCustomer{
+		Order: Order{
+			OrderBase: OrderBase{
+				ID:        m.ID,
+				Status:    m.Status,
+				Price:     m.Price,
+				CreatedAt: time.Unix(m.CreatedAt, 0),
+			},
+			Products: make([]Product, 0),
+		},
+		Customer: &CustomerBase{
+			ID:        m.Customer.ID,
+			FirstName: m.Customer.FirstName,
+			LastName:  m.Customer.LastName,
+			Address:   m.Customer.Address,
+		},
+	}
 }
 
 type OrderItemModel struct {

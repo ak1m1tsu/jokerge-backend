@@ -1,24 +1,5 @@
 package types
 
-import "time"
-
-// Order заказ клиента
-type Order struct {
-	OrderID   string     `bun:",pk"`
-	Customer  *Customer  `bun:"rel:belongs-to"`
-	Products  OrderItems `bun:"rel:has-many"`
-	Status    OrderStatus
-	Price     int
-	CreatedAt time.Time
-}
-
-type OrderItems []OrderItem
-
-type OrderItem struct {
-	Product
-	Count int
-}
-
 // OrderStatus статус заказа
 type OrderStatus int
 
