@@ -1,0 +1,9 @@
+version: "3"
+services:
+  api:
+    container_name: jokerge-api
+    build:
+      context: .
+      dockerfile: .docker/Dockerfile
+    ports:
+      - 80:8000
