@@ -9,4 +9,4 @@ api:
 .PHONY: doc
 doc:
 	@go run github.com/swaggo/swag/cmd/swag@latest fmt ./internal && \
-	go run github.com/swaggo/swag/cmd/swag@latest init -g ./internal/app/api/app.go --pd --parseDepth 1 -o ./api --ot yml
+	go run github.com/swaggo/swag/cmd/swag@latest init -g ./internal/app/api/app.go --pd --parseDepth 1 -o ./api

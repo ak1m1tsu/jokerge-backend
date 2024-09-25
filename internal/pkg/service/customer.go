@@ -9,7 +9,7 @@ import (
 // GetCustomerInfo возвращает информацию о клиенте и его заказах
 func (s *Service) GetCustomerInfo(ctx context.Context, customerID string) (*types.Customer, error) {
 	model := new(types.CustomerModel)
-	if err := s.db.NewSelect().Model(model).Where("id = ?", customerID).Scan(ctx); err != nil {
+	if err := s.db.NewSelect().Model(model).Relation("Orders").Where("c.id = ?", customerID).Scan(ctx); err != nil {
 		return nil, err
 	}
 
@@ -19,7 +19,7 @@ func (s *Service) GetCustomerInfo(ctx context.Context, customerID string) (*type
 // GetCustomers возвращает список клиентов с их заказами
 func (s *Service) GetCustomers(ctx context.Context) ([]*types.Customer, error) {
 	var model []types.CustomerModel
-	if err := s.db.NewSelect().Model(&model).Scan(ctx); err != nil {
+	if err := s.db.NewSelect().Model(&model).Relation("Orders").Scan(ctx); err != nil {
 		return nil, err
 	}
 

@@ -9,7 +9,7 @@ type Customer struct {
 // Order полноценная презентация заказа
 type Order struct {
 	OrderBase
-	Products []Product
+	Products []OrderItem
 }
 
 // CalculatePrice считает текущую стоимость заказа, исходя из стоимости и кол-ва продуктов.
@@ -39,6 +39,10 @@ type OrderWithCustomer struct {
 // Product полноценная презентация продукта
 type Product struct {
 	ProductBase
+}
+
+type OrderItem struct {
+	Product
 	Count int
 }
 

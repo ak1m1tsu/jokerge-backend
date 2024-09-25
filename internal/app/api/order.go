@@ -29,18 +29,21 @@ func (e *Env) OrderList(ctx *fiber.Ctx) error {
 //	@Summary	информация о заказе
 //	@Tags		orders
 //	@Produce	json
-//	@Param		order_id		path		string	true	"ID заказа"
+//	@Param		order_id		path		int		true	"ID заказа"
 //	@Param		X-Request-ID	header		string	true	"ID запроса"
 //	@Success	200				{object}	OrderListItem
 //	@Failure	404				{object}	Response
 //	@Failure	500				{object}	Response
 //	@Router		/api/v1/order/{order_id} [get]
 func (e *Env) OrderGet(ctx *fiber.Ctx) error {
-	id := ctx.Params("id")
+	id, err := ctx.ParamsInt("id")
+	if err != nil {
+		return err
+	}
 
 	order, err := e.Service().GetOrderInfo(ctx.Context(), id)
 	if err != nil {
-		zerolog.Ctx(ctx.UserContext()).Error().Err(err).Msgf("failed to get order by id %s", id)
+		zerolog.Ctx(ctx.UserContext()).Error().Err(err).Msgf("failed to get order by id %d", id)
 		return err
 	}
 

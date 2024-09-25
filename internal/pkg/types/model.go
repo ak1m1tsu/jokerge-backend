@@ -25,6 +25,17 @@ type ProductModel struct {
 	Price       int
 }
 
+func (m ProductModel) ToProduct() *Product {
+	return &Product{
+		ProductBase: ProductBase{
+			ID:          m.ID,
+			Name:        m.Name,
+			Description: m.Description,
+			Price:       m.Price,
+		},
+	}
+}
+
 type CustomerModel struct {
 	bun.BaseModel `bun:"table:customers,alias:c"`
 
@@ -46,6 +57,10 @@ func (m CustomerModel) ToCustomer() *Customer {
 		Orders: make([]Order, 0),
 	}
 
+	for _, om := range m.Orders {
+		c.Orders = append(c.Orders, *om.ToOrder())
+	}
+
 	return c
 }
 
@@ -55,7 +70,7 @@ type OrderModel struct {
 	ID         int `bun:",pk,autoincrement"`
 	CustomerID string
 	Customer   *CustomerModel   `bun:"rel:belongs-to,join:customer_id=id"`
-	Products   []OrderItemModel `bun:"rel:has-many,join:id=order_id"`
+	Products   []OrderItemModel `bun:"m2m:order_items,join:Order=Product"`
 	Status     OrderStatus
 	Price      int
 	CreatedAt  int64
@@ -69,14 +84,18 @@ func (m OrderModel) ToOrder() *Order {
 			Price:     m.Price,
 			CreatedAt: time.Unix(m.CreatedAt, 0),
 		},
-		Products: make([]Product, 0),
+		Products: make([]OrderItem, 0),
+	}
+
+	for _, pm := range m.Products {
+		o.Products = append(o.Products, *pm.ToOrderItem())
 	}
 
 	return o
 }
 
 func (m OrderModel) ToOrderWithCustomer() *OrderWithCustomer {
-	return &OrderWithCustomer{
+	o := &OrderWithCustomer{
 		Order: Order{
 			OrderBase: OrderBase{
 				ID:        m.ID,
@@ -84,23 +103,39 @@ func (m OrderModel) ToOrderWithCustomer() *OrderWithCustomer {
 				Price:     m.Price,
 				CreatedAt: time.Unix(m.CreatedAt, 0),
 			},
-			Products: make([]Product, 0),
+			Products: make([]OrderItem, 0),
 		},
-		Customer: &CustomerBase{
+	}
+
+	if m.Customer != nil {
+		o.Customer = &CustomerBase{
 			ID:        m.Customer.ID,
 			FirstName: m.Customer.FirstName,
 			LastName:  m.Customer.LastName,
 			Address:   m.Customer.Address,
-		},
+		}
 	}
+
+	for _, pm := range m.Products {
+		o.Products = append(o.Products, *pm.ToOrderItem())
+	}
+
+	return o
 }
 
 type OrderItemModel struct {
 	bun.BaseModel `bun:"table:order_items,alias:oi"`
 
-	OrderID   int
-	Order     *OrderModel `bun:"rel:belongs-to,join:order_id=id"`
-	ProductID string
+	OrderID   int           `bun:",pk"`
+	Order     *OrderModel   `bun:"rel:belongs-to,join:order_id=id"`
+	ProductID string        `bun:",pk"`
 	Product   *ProductModel `bun:"rel:belongs-to,join:product_id=id"`
 	Count     int
+}
+
+func (m OrderItemModel) ToOrderItem() *OrderItem {
+	return &OrderItem{
+		Product: *m.Product.ToProduct(),
+		Count:   m.Count,
+	}
 }

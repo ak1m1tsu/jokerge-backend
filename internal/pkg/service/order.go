@@ -9,7 +9,7 @@ import (
 // GetOrders возвращает список заказов с их клиентами
 func (s *Service) GetOrders(ctx context.Context) ([]*types.OrderWithCustomer, error) {
 	var model []types.OrderModel
-	if err := s.db.NewSelect().Model(&model).Scan(ctx); err != nil {
+	if err := s.db.NewSelect().Model(&model).Relation("Customer").Scan(ctx); err != nil {
 		return nil, err
 	}
 
@@ -22,8 +22,11 @@ func (s *Service) GetOrders(ctx context.Context) ([]*types.OrderWithCustomer, er
 }
 
 // GetOrderInfo возвращает информацию о заказе вместе с его клиентом
-func (s *Service) GetOrderInfo(ctx context.Context, id string) (*types.OrderWithCustomer, error) {
-	order := &types.OrderWithCustomer{}
+func (s *Service) GetOrderInfo(ctx context.Context, id int) (*types.OrderWithCustomer, error) {
+	model := new(types.OrderModel)
+	if err := s.db.NewSelect().Model(model).Where("o.id = ?", id).Relation("Customer").Scan(ctx); err != nil {
+		return nil, err
+	}
 
-	return order, nil
+	return model.ToOrderWithCustomer(), nil
 }

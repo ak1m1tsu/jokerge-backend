@@ -2,10 +2,12 @@ package api
 
 import (
 	"context"
+	"database/sql"
 	"errors"
 	"net/http"
 	"time"
 
+	_ "github.com/ak1m1tsu/jokerge/api"
 	"github.com/ak1m1tsu/jokerge/internal/pkg/middleware"
 	"github.com/ak1m1tsu/jokerge/internal/pkg/service"
 	"github.com/ak1m1tsu/jokerge/internal/pkg/types"
@@ -13,6 +15,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/basicauth"
 	"github.com/gofiber/fiber/v2/middleware/cors"
+	"github.com/gofiber/swagger"
 	"github.com/google/uuid"
 )
 
@@ -53,6 +56,10 @@ func New() (*Env, error) {
 		return nil, err
 	}
 
+	env.app.Get("/swagger/*", swagger.New(swagger.Config{
+		Title: "Jokerge API",
+	}))
+
 	api := env.app.Group("/api")
 
 	api.Use(middleware.RequestID())
@@ -66,11 +73,14 @@ func New() (*Env, error) {
 	v1.Use(basicauth.New(basicauth.Config{
 		Realm:      "Forbidden",
 		Authorizer: env.Authorizer,
+		Unauthorized: func(c *fiber.Ctx) error {
+			return c.Status(http.StatusUnauthorized).JSON(Response{Error: "unauthorized"})
+		},
 	}))
 
 	v1.Route("/order", func(router fiber.Router) {
 		router.Get("/list", env.OrderList)
-		router.Get("/:id<guid>", env.OrderGet)
+		router.Get("/:id<int>", env.OrderGet)
 		router.Post("/", env.OrderCreate)
 		router.Post("/update", env.OrderUpdate)
 	})
@@ -101,6 +111,15 @@ func (e *Env) OK(ctx *fiber.Ctx) error {
 }
 
 func (e *Env) Authorizer(email, pass string) bool {
+	_, ok, err := e.Service().ValidateUser(context.Background(), email, pass)
+	if err != nil {
+		return false
+	}
+
+	if !ok {
+		return false
+	}
+
 	return true
 }
 
@@ -110,10 +129,13 @@ func (e *Env) SeedData() error {
 		ctx = context.Background()
 	)
 
+	e.Service().DB().RegisterModel((*types.OrderItemModel)(nil))
+
 	tx, err := e.Service().DB().Begin()
 	if err != nil {
 		return err
 	}
+
 	if _, err = tx.NewCreateTable().Model((*types.UserModel)(nil)).Exec(ctx); err != nil {
 		return err
 	}
@@ -136,8 +158,8 @@ func (e *Env) SeedData() error {
 
 	user := &types.UserModel{
 		ID:        uuid.NewString(),
-		Email:     "admin@admin.com",
-		Password:  "SuperPassword",
+		Email:     "admin",
+		Password:  "admin",
 		FirstName: "Иван",
 		LastName:  "Иванов",
 	}
@@ -166,21 +188,36 @@ func (e *Env) SeedData() error {
 		},
 	}
 
-	for _, customer := range customers {
-		if _, err = tx.NewInsert().Model(customer).Exec(ctx); err != nil {
-			return err
-		}
+	if _, err = tx.NewInsert().Model(&customers).Exec(ctx); err != nil {
+		return err
+	}
+
+	orders := []types.OrderModel{
+		{
+			CustomerID: "c22946d7-991e-44a1-b0dc-6b775a34664c",
+			Status:     types.OrderStatusActive,
+			Price:      0,
+			CreatedAt:  time.Now().Unix(),
+		},
+	}
+
+	if _, err = tx.NewInsert().Model(&orders).Exec(ctx); err != nil {
+		return err
 	}
 
 	return tx.Commit()
 }
 
 func HandleError(ctx *fiber.Ctx, err error) error {
+	if errors.Is(sql.ErrNoRows, err) {
+		return ctx.Status(http.StatusNotFound).JSON(Response{Error: "not found"})
+	}
+
 	code := http.StatusInternalServerError
 
-	var e *fiber.Error
-	if errors.As(err, &e) {
-		code = e.Code
+	var apiErr *fiber.Error
+	if errors.As(err, &apiErr) {
+		code = apiErr.Code
 	}
 
 	switch code {

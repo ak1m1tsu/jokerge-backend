@@ -200,7 +200,7 @@ paths:
         in: path
         name: order_id
         required: true
-        type: string
+        type: integer
       - description: ID запроса
         in: header
         name: X-Request-ID
