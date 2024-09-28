@@ -1,6 +1,39 @@
 basePath: /
 definitions:
-  internal_app_api.CustomerItem:
+  github_com_ak1m1tsu_jokerge_internal_pkg_types.APIResponse:
+    properties:
+      error:
+        type: string
+      message:
+        type: string
+    type: object
+  github_com_ak1m1tsu_jokerge_internal_pkg_types.CustomerInfoOrderResponse:
+    properties:
+      created_at:
+        type: string
+      id:
+        type: integer
+      price:
+        type: integer
+      status:
+        type: string
+    type: object
+  github_com_ak1m1tsu_jokerge_internal_pkg_types.CustomerInfoResponse:
+    properties:
+      address:
+        type: string
+      first_name:
+        type: string
+      id:
+        type: string
+      last_name:
+        type: string
+      orders:
+        items:
+          $ref: '#/definitions/github_com_ak1m1tsu_jokerge_internal_pkg_types.CustomerInfoOrderResponse'
+        type: array
+    type: object
+  github_com_ak1m1tsu_jokerge_internal_pkg_types.OrderInfoCustomerResponse:
     properties:
       address:
         type: string
@@ -11,23 +44,48 @@ definitions:
       last_name:
         type: string
     type: object
-  internal_app_api.OrderListItem:
+  github_com_ak1m1tsu_jokerge_internal_pkg_types.OrderInfoProductResponse:
     properties:
+      count:
+        type: integer
+      description:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      price:
+        type: integer
+    type: object
+  github_com_ak1m1tsu_jokerge_internal_pkg_types.OrderInfoResponse:
+    properties:
+      created_at:
+        type: string
       customer:
-        $ref: '#/definitions/internal_app_api.CustomerItem'
+        $ref: '#/definitions/github_com_ak1m1tsu_jokerge_internal_pkg_types.OrderInfoCustomerResponse'
       id:
         type: integer
+      price:
+        type: integer
+      products:
+        items:
+          $ref: '#/definitions/github_com_ak1m1tsu_jokerge_internal_pkg_types.OrderInfoProductResponse'
+        type: array
       status:
         type: string
     type: object
-  internal_app_api.Response:
+  github_com_ak1m1tsu_jokerge_internal_pkg_types.ProductInfoResponse:
     properties:
-      error:
+      description:
         type: string
-      status:
+      id:
         type: string
+      name:
+        type: string
+      price:
+        type: integer
     type: object
-  internal_app_api.UserInfoItem:
+  github_com_ak1m1tsu_jokerge_internal_pkg_types.ValidateUserCredentialsResponse:
     properties:
       email:
         type: string
@@ -76,7 +134,11 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/internal_app_api.UserInfoItem'
+            $ref: '#/definitions/github_com_ak1m1tsu_jokerge_internal_pkg_types.ValidateUserCredentialsResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/github_com_ak1m1tsu_jokerge_internal_pkg_types.APIResponse'
       summary: валидация пользовательских данных
       tags:
       - auth
@@ -96,15 +158,15 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/internal_app_api.Response'
+            $ref: '#/definitions/github_com_ak1m1tsu_jokerge_internal_pkg_types.APIResponse'
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/internal_app_api.Response'
+            $ref: '#/definitions/github_com_ak1m1tsu_jokerge_internal_pkg_types.APIResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/internal_app_api.Response'
+            $ref: '#/definitions/github_com_ak1m1tsu_jokerge_internal_pkg_types.APIResponse'
       summary: создание нового клиента
       tags:
       - customers
@@ -129,15 +191,15 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/internal_app_api.CustomerItem'
+            $ref: '#/definitions/github_com_ak1m1tsu_jokerge_internal_pkg_types.CustomerInfoResponse'
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/internal_app_api.Response'
+            $ref: '#/definitions/github_com_ak1m1tsu_jokerge_internal_pkg_types.APIResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/internal_app_api.Response'
+            $ref: '#/definitions/github_com_ak1m1tsu_jokerge_internal_pkg_types.APIResponse'
       summary: информация о клиенте
       tags:
       - customers
@@ -156,12 +218,12 @@ paths:
           description: OK
           schema:
             items:
-              $ref: '#/definitions/internal_app_api.CustomerItem'
+              $ref: '#/definitions/github_com_ak1m1tsu_jokerge_internal_pkg_types.CustomerInfoResponse'
             type: array
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/internal_app_api.Response'
+            $ref: '#/definitions/github_com_ak1m1tsu_jokerge_internal_pkg_types.APIResponse'
       summary: список клиентов
       tags:
       - customers
@@ -181,15 +243,15 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/internal_app_api.Response'
+            $ref: '#/definitions/github_com_ak1m1tsu_jokerge_internal_pkg_types.APIResponse'
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/internal_app_api.Response'
+            $ref: '#/definitions/github_com_ak1m1tsu_jokerge_internal_pkg_types.APIResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/internal_app_api.Response'
+            $ref: '#/definitions/github_com_ak1m1tsu_jokerge_internal_pkg_types.APIResponse'
       summary: создаение заказа
       tags:
       - orders
@@ -212,15 +274,15 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/internal_app_api.OrderListItem'
+            $ref: '#/definitions/github_com_ak1m1tsu_jokerge_internal_pkg_types.OrderInfoResponse'
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/internal_app_api.Response'
+            $ref: '#/definitions/github_com_ak1m1tsu_jokerge_internal_pkg_types.APIResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/internal_app_api.Response'
+            $ref: '#/definitions/github_com_ak1m1tsu_jokerge_internal_pkg_types.APIResponse'
       summary: информация о заказе
       tags:
       - orders
@@ -239,12 +301,12 @@ paths:
           description: OK
           schema:
             items:
-              $ref: '#/definitions/internal_app_api.OrderListItem'
+              $ref: '#/definitions/github_com_ak1m1tsu_jokerge_internal_pkg_types.OrderInfoResponse'
             type: array
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/internal_app_api.Response'
+            $ref: '#/definitions/github_com_ak1m1tsu_jokerge_internal_pkg_types.APIResponse'
       summary: список заказов
       tags:
       - orders
@@ -264,15 +326,71 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/internal_app_api.Response'
+            $ref: '#/definitions/github_com_ak1m1tsu_jokerge_internal_pkg_types.APIResponse'
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/internal_app_api.Response'
+            $ref: '#/definitions/github_com_ak1m1tsu_jokerge_internal_pkg_types.APIResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/internal_app_api.Response'
+            $ref: '#/definitions/github_com_ak1m1tsu_jokerge_internal_pkg_types.APIResponse'
       tags:
       - orders
+  /api/v1/product/{product_id}:
+    get:
+      parameters:
+      - description: ID продукта
+        in: path
+        name: product_id
+        required: true
+        type: string
+      - description: ID запроса
+        in: header
+        name: X-Request-ID
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_ak1m1tsu_jokerge_internal_pkg_types.ProductInfoResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/github_com_ak1m1tsu_jokerge_internal_pkg_types.APIResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/github_com_ak1m1tsu_jokerge_internal_pkg_types.APIResponse'
+      summary: информация о продукте
+      tags:
+      - products
+  /api/v1/produuct/list:
+    get:
+      parameters:
+      - description: ID запроса
+        in: header
+        name: X-Request-ID
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/github_com_ak1m1tsu_jokerge_internal_pkg_types.ProductInfoResponse'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/github_com_ak1m1tsu_jokerge_internal_pkg_types.APIResponse'
+      summary: список продуктов
+      tags:
+      - products
+securityDefinitions:
+  BasicAuth:
+    type: basic
 swagger: "2.0"

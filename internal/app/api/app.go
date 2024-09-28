@@ -25,6 +25,8 @@ import (
 //	@host		localhost:8000
 //	@BasePath	/
 
+//	@securityDefinitions.basic	BasicAuth
+
 //	@externalDocs.description	OpenAPI
 //	@externalDocs.url			https://swagger.io/resources/open-api/
 
@@ -74,7 +76,7 @@ func New() (*Env, error) {
 		Realm:      "Forbidden",
 		Authorizer: env.Authorizer,
 		Unauthorized: func(c *fiber.Ctx) error {
-			return c.Status(http.StatusUnauthorized).JSON(Response{Error: "unauthorized"})
+			return c.Status(http.StatusUnauthorized).JSON(types.APIResponse{Error: "unauthorized"})
 		},
 	}))
 
@@ -91,6 +93,11 @@ func New() (*Env, error) {
 		router.Post("/", env.CustomerCreate)
 	})
 
+	v1.Route("/product", func(router fiber.Router) {
+		router.Get("/list", env.ProductList)
+		router.Get("/:id<guid>", env.ProductGet)
+	})
+
 	return env, nil
 }
 
@@ -103,11 +110,11 @@ func (e *Env) Service() *service.Service {
 }
 
 func (e *Env) NotFound(ctx *fiber.Ctx) error {
-	return ctx.Status(http.StatusNotFound).JSON(Response{Error: "not found"})
+	return ctx.Status(http.StatusNotFound).JSON(types.APIResponse{Error: "not found"})
 }
 
 func (e *Env) OK(ctx *fiber.Ctx) error {
-	return ctx.Status(http.StatusOK).JSON(Response{Status: "ok"})
+	return ctx.Status(http.StatusOK).JSON(types.APIResponse{Message: "ok"})
 }
 
 func (e *Env) Authorizer(email, pass string) bool {
@@ -210,7 +217,7 @@ func (e *Env) SeedData() error {
 
 func HandleError(ctx *fiber.Ctx, err error) error {
 	if errors.Is(sql.ErrNoRows, err) {
-		return ctx.Status(http.StatusNotFound).JSON(Response{Error: "not found"})
+		return ctx.Status(http.StatusNotFound).JSON(types.APIResponse{Error: "not found"})
 	}
 
 	code := http.StatusInternalServerError
@@ -222,10 +229,10 @@ func HandleError(ctx *fiber.Ctx, err error) error {
 
 	switch code {
 	case http.StatusMethodNotAllowed:
-		return ctx.Status(code).JSON(Response{Error: "method not allowed"})
+		return ctx.Status(code).JSON(types.APIResponse{Error: "method not allowed"})
 	case http.StatusNotFound:
-		return ctx.Status(code).JSON(Response{Error: "not found"})
+		return ctx.Status(code).JSON(types.APIResponse{Error: "not found"})
 	default:
-		return ctx.Status(code).JSON(Response{Error: "internal"})
+		return ctx.Status(code).JSON(types.APIResponse{Error: "internal"})
 	}
 }

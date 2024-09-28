@@ -49,7 +49,13 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/internal_app_api.UserInfoItem"
+                            "$ref": "#/definitions/github_com_ak1m1tsu_jokerge_internal_pkg_types.ValidateUserCredentialsResponse"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_ak1m1tsu_jokerge_internal_pkg_types.APIResponse"
                         }
                     }
                 }
@@ -80,19 +86,19 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/internal_app_api.Response"
+                            "$ref": "#/definitions/github_com_ak1m1tsu_jokerge_internal_pkg_types.APIResponse"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/internal_app_api.Response"
+                            "$ref": "#/definitions/github_com_ak1m1tsu_jokerge_internal_pkg_types.APIResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/internal_app_api.Response"
+                            "$ref": "#/definitions/github_com_ak1m1tsu_jokerge_internal_pkg_types.APIResponse"
                         }
                     }
                 }
@@ -122,14 +128,14 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/internal_app_api.CustomerItem"
+                                "$ref": "#/definitions/github_com_ak1m1tsu_jokerge_internal_pkg_types.CustomerInfoResponse"
                             }
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/internal_app_api.Response"
+                            "$ref": "#/definitions/github_com_ak1m1tsu_jokerge_internal_pkg_types.APIResponse"
                         }
                     }
                 }
@@ -167,19 +173,19 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/internal_app_api.CustomerItem"
+                            "$ref": "#/definitions/github_com_ak1m1tsu_jokerge_internal_pkg_types.CustomerInfoResponse"
                         }
                     },
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "$ref": "#/definitions/internal_app_api.Response"
+                            "$ref": "#/definitions/github_com_ak1m1tsu_jokerge_internal_pkg_types.APIResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/internal_app_api.Response"
+                            "$ref": "#/definitions/github_com_ak1m1tsu_jokerge_internal_pkg_types.APIResponse"
                         }
                     }
                 }
@@ -210,19 +216,19 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/internal_app_api.Response"
+                            "$ref": "#/definitions/github_com_ak1m1tsu_jokerge_internal_pkg_types.APIResponse"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/internal_app_api.Response"
+                            "$ref": "#/definitions/github_com_ak1m1tsu_jokerge_internal_pkg_types.APIResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/internal_app_api.Response"
+                            "$ref": "#/definitions/github_com_ak1m1tsu_jokerge_internal_pkg_types.APIResponse"
                         }
                     }
                 }
@@ -252,14 +258,14 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/internal_app_api.OrderListItem"
+                                "$ref": "#/definitions/github_com_ak1m1tsu_jokerge_internal_pkg_types.OrderInfoResponse"
                             }
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/internal_app_api.Response"
+                            "$ref": "#/definitions/github_com_ak1m1tsu_jokerge_internal_pkg_types.APIResponse"
                         }
                     }
                 }
@@ -289,19 +295,19 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/internal_app_api.Response"
+                            "$ref": "#/definitions/github_com_ak1m1tsu_jokerge_internal_pkg_types.APIResponse"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/internal_app_api.Response"
+                            "$ref": "#/definitions/github_com_ak1m1tsu_jokerge_internal_pkg_types.APIResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/internal_app_api.Response"
+                            "$ref": "#/definitions/github_com_ak1m1tsu_jokerge_internal_pkg_types.APIResponse"
                         }
                     }
                 }
@@ -336,19 +342,100 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/internal_app_api.OrderListItem"
+                            "$ref": "#/definitions/github_com_ak1m1tsu_jokerge_internal_pkg_types.OrderInfoResponse"
                         }
                     },
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "$ref": "#/definitions/internal_app_api.Response"
+                            "$ref": "#/definitions/github_com_ak1m1tsu_jokerge_internal_pkg_types.APIResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/internal_app_api.Response"
+                            "$ref": "#/definitions/github_com_ak1m1tsu_jokerge_internal_pkg_types.APIResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/product/{product_id}": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "products"
+                ],
+                "summary": "информация о продукте",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "ID продукта",
+                        "name": "product_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "ID запроса",
+                        "name": "X-Request-ID",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_ak1m1tsu_jokerge_internal_pkg_types.ProductInfoResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_ak1m1tsu_jokerge_internal_pkg_types.APIResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_ak1m1tsu_jokerge_internal_pkg_types.APIResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/produuct/list": {
+            "get": {
+                "tags": [
+                    "products"
+                ],
+                "summary": "список продуктов",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "ID запроса",
+                        "name": "X-Request-ID",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/github_com_ak1m1tsu_jokerge_internal_pkg_types.ProductInfoResponse"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_ak1m1tsu_jokerge_internal_pkg_types.APIResponse"
                         }
                     }
                 }
@@ -356,7 +443,58 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "internal_app_api.CustomerItem": {
+        "github_com_ak1m1tsu_jokerge_internal_pkg_types.APIResponse": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "string"
+                },
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "github_com_ak1m1tsu_jokerge_internal_pkg_types.CustomerInfoOrderResponse": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "price": {
+                    "type": "integer"
+                },
+                "status": {
+                    "type": "string"
+                }
+            }
+        },
+        "github_com_ak1m1tsu_jokerge_internal_pkg_types.CustomerInfoResponse": {
+            "type": "object",
+            "properties": {
+                "address": {
+                    "type": "string"
+                },
+                "first_name": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "last_name": {
+                    "type": "string"
+                },
+                "orders": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/github_com_ak1m1tsu_jokerge_internal_pkg_types.CustomerInfoOrderResponse"
+                    }
+                }
+            }
+        },
+        "github_com_ak1m1tsu_jokerge_internal_pkg_types.OrderInfoCustomerResponse": {
             "type": "object",
             "properties": {
                 "address": {
@@ -373,32 +511,70 @@ const docTemplate = `{
                 }
             }
         },
-        "internal_app_api.OrderListItem": {
+        "github_com_ak1m1tsu_jokerge_internal_pkg_types.OrderInfoProductResponse": {
             "type": "object",
             "properties": {
+                "count": {
+                    "type": "integer"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "price": {
+                    "type": "integer"
+                }
+            }
+        },
+        "github_com_ak1m1tsu_jokerge_internal_pkg_types.OrderInfoResponse": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string"
+                },
                 "customer": {
-                    "$ref": "#/definitions/internal_app_api.CustomerItem"
+                    "$ref": "#/definitions/github_com_ak1m1tsu_jokerge_internal_pkg_types.OrderInfoCustomerResponse"
                 },
                 "id": {
                     "type": "integer"
                 },
-                "status": {
-                    "type": "string"
-                }
-            }
-        },
-        "internal_app_api.Response": {
-            "type": "object",
-            "properties": {
-                "error": {
-                    "type": "string"
+                "price": {
+                    "type": "integer"
+                },
+                "products": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/github_com_ak1m1tsu_jokerge_internal_pkg_types.OrderInfoProductResponse"
+                    }
                 },
                 "status": {
                     "type": "string"
                 }
             }
         },
-        "internal_app_api.UserInfoItem": {
+        "github_com_ak1m1tsu_jokerge_internal_pkg_types.ProductInfoResponse": {
+            "type": "object",
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "price": {
+                    "type": "integer"
+                }
+            }
+        },
+        "github_com_ak1m1tsu_jokerge_internal_pkg_types.ValidateUserCredentialsResponse": {
             "type": "object",
             "properties": {
                 "email": {
@@ -425,6 +601,11 @@ const docTemplate = `{
                     "type": "string"
                 }
             }
+        }
+    },
+    "securityDefinitions": {
+        "BasicAuth": {
+            "type": "basic"
         }
     },
     "externalDocs": {

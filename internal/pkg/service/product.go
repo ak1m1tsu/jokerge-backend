@@ -6,7 +6,7 @@ import (
 	"github.com/ak1m1tsu/jokerge/internal/pkg/types"
 )
 
-func (s *Service) GetProductList(ctx context.Context) ([]*types.Product, error) {
+func (s *Service) GetProducts(ctx context.Context) ([]*types.Product, error) {
 	var model []types.ProductModel
 	if err := s.db.NewSelect().Model(&model).Scan(ctx); err != nil {
 		return nil, err
