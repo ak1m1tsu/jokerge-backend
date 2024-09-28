@@ -167,6 +167,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/github_com_ak1m1tsu_jokerge_internal_pkg_types.APIResponse'
+      security:
+      - BasicAuth: []
       summary: создание нового клиента
       tags:
       - customers
@@ -200,6 +202,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/github_com_ak1m1tsu_jokerge_internal_pkg_types.APIResponse'
+      security:
+      - BasicAuth: []
       summary: информация о клиенте
       tags:
       - customers
@@ -224,6 +228,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/github_com_ak1m1tsu_jokerge_internal_pkg_types.APIResponse'
+      security:
+      - BasicAuth: []
       summary: список клиентов
       tags:
       - customers
@@ -252,6 +258,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/github_com_ak1m1tsu_jokerge_internal_pkg_types.APIResponse'
+      security:
+      - BasicAuth: []
       summary: создаение заказа
       tags:
       - orders
@@ -283,6 +291,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/github_com_ak1m1tsu_jokerge_internal_pkg_types.APIResponse'
+      security:
+      - BasicAuth: []
       summary: информация о заказе
       tags:
       - orders
@@ -307,6 +317,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/github_com_ak1m1tsu_jokerge_internal_pkg_types.APIResponse'
+      security:
+      - BasicAuth: []
       summary: список заказов
       tags:
       - orders
@@ -335,6 +347,9 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/github_com_ak1m1tsu_jokerge_internal_pkg_types.APIResponse'
+      security:
+      - BasicAuth: []
+      summary: обновление информации о заказе
       tags:
       - orders
   /api/v1/product/{product_id}:
@@ -365,6 +380,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/github_com_ak1m1tsu_jokerge_internal_pkg_types.APIResponse'
+      security:
+      - BasicAuth: []
       summary: информация о продукте
       tags:
       - products
@@ -387,6 +404,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/github_com_ak1m1tsu_jokerge_internal_pkg_types.APIResponse'
+      security:
+      - BasicAuth: []
       summary: список продуктов
       tags:
       - products

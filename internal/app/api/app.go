@@ -17,6 +17,7 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/gofiber/swagger"
 	"github.com/google/uuid"
+	"github.com/rs/zerolog/log"
 )
 
 //	@title		jokerge
@@ -43,7 +44,7 @@ func New() (*Env, error) {
 
 	env := &Env{
 		app: fiber.New(fiber.Config{
-			ServerHeader: "X-Server",
+			ServerHeader: "jokerge",
 			ReadTimeout:  time.Second * 5,
 			WriteTimeout: time.Second * 5,
 			IdleTimeout:  time.Second * 30,
@@ -120,10 +121,12 @@ func (e *Env) OK(ctx *fiber.Ctx) error {
 func (e *Env) Authorizer(email, pass string) bool {
 	_, ok, err := e.Service().ValidateUser(context.Background(), email, pass)
 	if err != nil {
+		log.Error().Err(err).Msg("failed to validate user")
 		return false
 	}
 
 	if !ok {
+		log.Error().Msgf("invalid user credentails: %s:%s", email, pass)
 		return false
 	}
 

@@ -10,6 +10,7 @@ import (
 //
 //	@Summary	список клиентов
 //	@Tags		customers
+//	@Security	BasicAuth
 //	@Produce	json
 //	@Param		X-Request-ID	header		string	true	"ID запроса"
 //	@Success	200				{object}	types.CustomerListResponse
@@ -53,6 +54,7 @@ func (e *Env) CustomerList(ctx *fiber.Ctx) error {
 //
 //	@Summary	информация о клиенте
 //	@Tags		customers
+//	@Security	BasicAuth
 //	@Produce	json
 //	@Accept		json
 //	@Param		customer_id		path		string	true	"ID клиента"
@@ -81,6 +83,7 @@ func (e *Env) CustomerGet(ctx *fiber.Ctx) error {
 //
 //	@Summary	создание нового клиента
 //	@Tags		customers
+//	@Security	BasicAuth
 //	@Accept		json
 //	@Produce	json
 //	@Param		X-Request-ID	header		string	true	"ID запроса"

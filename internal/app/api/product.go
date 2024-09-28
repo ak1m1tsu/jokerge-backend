@@ -10,6 +10,7 @@ import (
 //
 //	@Summary	список продуктов
 //	@Tags		products
+//	@Security	BasicAuth
 //	@Product	json
 //	@Param		X-Request-ID	header		string	true	"ID запроса"
 //	@Success	200				{object}	types.ProductListResponse
@@ -40,6 +41,7 @@ func (e *Env) ProductList(ctx *fiber.Ctx) error {
 //
 //	@Summary	информация о продукте
 //	@Tags		products
+//	@Security	BasicAuth
 //	@Produce	json
 //	@Param		product_id		path		string	true	"ID продукта"
 //	@Param		X-Request-ID	header		string	true	"ID запроса"

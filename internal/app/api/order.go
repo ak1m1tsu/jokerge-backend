@@ -10,6 +10,7 @@ import (
 //
 //	@Summary	список заказов
 //	@Tags		orders
+//	@Security	BasicAuth
 //	@Produce	json
 //	@Param		X-Request-ID	header		string	true	"ID запроса"
 //	@Success	200				{object}	types.OrderListResponse
@@ -59,6 +60,7 @@ func (e *Env) OrderList(ctx *fiber.Ctx) error {
 //
 //	@Summary	информация о заказе
 //	@Tags		orders
+//	@Security	BasicAuth
 //	@Produce	json
 //	@Param		order_id		path		int		true	"ID заказа"
 //	@Param		X-Request-ID	header		string	true	"ID запроса"
@@ -113,6 +115,7 @@ func (e *Env) OrderGet(ctx *fiber.Ctx) error {
 //
 //	@Summary	создаение заказа
 //	@Tags		orders
+//	@Security	BasicAuth
 //	@Accept		json
 //	@Produce	json
 //	@Param		X-Request-ID	header		string	true	"ID запроса"
@@ -126,8 +129,9 @@ func (e *Env) OrderCreate(ctx *fiber.Ctx) error {
 
 // OrderUpdate обновление инфорамации заказа
 //
-//	@Summary
+//	@Summary	обновление информации о заказе
 //	@Tags		orders
+//	@Security	BasicAuth
 //	@Accept		json
 //	@Produce	json
 //	@Param		X-Request-ID	header		string	true	"ID запроса"

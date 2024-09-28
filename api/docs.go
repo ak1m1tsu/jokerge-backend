@@ -63,6 +63,11 @@ const docTemplate = `{
         },
         "/api/v1/customer": {
             "post": {
+                "security": [
+                    {
+                        "BasicAuth": []
+                    }
+                ],
                 "consumes": [
                     "application/json"
                 ],
@@ -106,6 +111,11 @@ const docTemplate = `{
         },
         "/api/v1/customer/list": {
             "get": {
+                "security": [
+                    {
+                        "BasicAuth": []
+                    }
+                ],
                 "produces": [
                     "application/json"
                 ],
@@ -143,6 +153,11 @@ const docTemplate = `{
         },
         "/api/v1/customer/{customer_id}": {
             "get": {
+                "security": [
+                    {
+                        "BasicAuth": []
+                    }
+                ],
                 "consumes": [
                     "application/json"
                 ],
@@ -193,6 +208,11 @@ const docTemplate = `{
         },
         "/api/v1/order": {
             "post": {
+                "security": [
+                    {
+                        "BasicAuth": []
+                    }
+                ],
                 "consumes": [
                     "application/json"
                 ],
@@ -236,6 +256,11 @@ const docTemplate = `{
         },
         "/api/v1/order/list": {
             "get": {
+                "security": [
+                    {
+                        "BasicAuth": []
+                    }
+                ],
                 "produces": [
                     "application/json"
                 ],
@@ -273,6 +298,11 @@ const docTemplate = `{
         },
         "/api/v1/order/update": {
             "post": {
+                "security": [
+                    {
+                        "BasicAuth": []
+                    }
+                ],
                 "consumes": [
                     "application/json"
                 ],
@@ -282,6 +312,7 @@ const docTemplate = `{
                 "tags": [
                     "orders"
                 ],
+                "summary": "обновление информации о заказе",
                 "parameters": [
                     {
                         "type": "string",
@@ -315,6 +346,11 @@ const docTemplate = `{
         },
         "/api/v1/order/{order_id}": {
             "get": {
+                "security": [
+                    {
+                        "BasicAuth": []
+                    }
+                ],
                 "produces": [
                     "application/json"
                 ],
@@ -362,6 +398,11 @@ const docTemplate = `{
         },
         "/api/v1/product/{product_id}": {
             "get": {
+                "security": [
+                    {
+                        "BasicAuth": []
+                    }
+                ],
                 "produces": [
                     "application/json"
                 ],
@@ -409,6 +450,11 @@ const docTemplate = `{
         },
         "/api/v1/produuct/list": {
             "get": {
+                "security": [
+                    {
+                        "BasicAuth": []
+                    }
+                ],
                 "tags": [
                     "products"
                 ],
