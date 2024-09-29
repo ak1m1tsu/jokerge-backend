@@ -23,6 +23,7 @@ type ProductModel struct {
 	Name        string
 	Description string
 	Price       int
+	Orders      []OrderModel `bun:"m2m:order_items,join:Product=Order"`
 }
 
 func (m ProductModel) ToProduct() *Product {

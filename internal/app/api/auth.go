@@ -31,7 +31,7 @@ func (e *Env) ValidateUserCredentials(ctx *fiber.Ctx) error {
 		return err
 	}
 
-	uinfo, ok, err := e.Service().ValidateUser(ctx.Context(), req.Email, req.Password)
+	uinfo, ok, err := e.Service().ValidateUser(ctx.UserContext(), req.Email, req.Password)
 	if err != nil {
 		zerolog.Ctx(ctx.UserContext()).Error().Err(err).Msg("failed to validate user credentials")
 		return err

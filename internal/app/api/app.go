@@ -146,23 +146,23 @@ func (e *Env) SeedData() error {
 		return err
 	}
 
-	if _, err = tx.NewCreateTable().Model((*types.UserModel)(nil)).Exec(ctx); err != nil {
+	if _, err = tx.NewCreateTable().IfNotExists().Model((*types.UserModel)(nil)).Exec(ctx); err != nil {
 		return err
 	}
 
-	if _, err = tx.NewCreateTable().Model((*types.ProductModel)(nil)).Exec(ctx); err != nil {
+	if _, err = tx.NewCreateTable().IfNotExists().Model((*types.ProductModel)(nil)).Exec(ctx); err != nil {
 		return err
 	}
 
-	if _, err = tx.NewCreateTable().Model((*types.CustomerModel)(nil)).Exec(ctx); err != nil {
+	if _, err = tx.NewCreateTable().IfNotExists().Model((*types.CustomerModel)(nil)).Exec(ctx); err != nil {
 		return err
 	}
 
-	if _, err = tx.NewCreateTable().Model((*types.OrderModel)(nil)).Exec(ctx); err != nil {
+	if _, err = tx.NewCreateTable().IfNotExists().Model((*types.OrderModel)(nil)).Exec(ctx); err != nil {
 		return err
 	}
 
-	if _, err = tx.NewCreateTable().Model((*types.OrderItemModel)(nil)).Exec(ctx); err != nil {
+	if _, err = tx.NewCreateTable().IfNotExists().Model((*types.OrderItemModel)(nil)).Exec(ctx); err != nil {
 		return err
 	}
 
@@ -204,14 +204,52 @@ func (e *Env) SeedData() error {
 
 	orders := []types.OrderModel{
 		{
+			ID:         1,
 			CustomerID: "c22946d7-991e-44a1-b0dc-6b775a34664c",
 			Status:     types.OrderStatusActive,
+			Price:      100,
+			CreatedAt:  time.Now().Unix(),
+		},
+		{
+			ID:         2,
+			CustomerID: "c22946d7-991e-44a1-b0dc-6b775a34664c",
+			Status:     types.OrderStatusCanceled,
 			Price:      0,
 			CreatedAt:  time.Now().Unix(),
 		},
 	}
 
 	if _, err = tx.NewInsert().Model(&orders).Exec(ctx); err != nil {
+		return err
+	}
+
+	products := []types.ProductModel{
+		{
+			ID:          "b94f9683-4b11-4eab-ac7a-1fc66e22ce6e",
+			Name:        "Item 1",
+			Description: "some description",
+			Price:       100,
+		},
+	}
+
+	if _, err := tx.NewInsert().Model(&products).Exec(ctx); err != nil {
+		return err
+	}
+
+	orderItems := []types.OrderItemModel{
+		{
+			OrderID:   1,
+			ProductID: "b94f9683-4b11-4eab-ac7a-1fc66e22ce6e",
+			Count:     10,
+		},
+		{
+			OrderID:   2,
+			ProductID: "b94f9683-4b11-4eab-ac7a-1fc66e22ce6e",
+			Count:     15,
+		},
+	}
+
+	if _, err := tx.NewInsert().Model(&orderItems).Exec(ctx); err != nil {
 		return err
 	}
 

@@ -17,7 +17,7 @@ import (
 //	@Failure	500				{object}	types.APIResponse
 //	@Router		/api/v1/order/list [get]
 func (e *Env) OrderList(ctx *fiber.Ctx) error {
-	orders, err := e.Service().GetOrders(ctx.Context())
+	orders, err := e.Service().GetOrders(ctx.UserContext())
 	if err != nil {
 		zerolog.Ctx(ctx.UserContext()).Error().Err(err).Msg("failed to get orders")
 		return err
@@ -74,7 +74,7 @@ func (e *Env) OrderGet(ctx *fiber.Ctx) error {
 		return err
 	}
 
-	order, err := e.Service().GetOrderInfo(ctx.Context(), id)
+	order, err := e.Service().GetOrderInfo(ctx.UserContext(), id)
 	if err != nil {
 		zerolog.Ctx(ctx.UserContext()).Error().Err(err).Msgf("failed to get order by id %d", id)
 		return err
