@@ -8,5 +8,5 @@ api:
 
 .PHONY: doc
 doc:
-	@go run github.com/swaggo/swag/cmd/swag@latest fmt ./internal && \
-	go run github.com/swaggo/swag/cmd/swag@latest init -g ./internal/app/api/app.go --pd --parseDepth 1 -o ./api
+	@go run github.com/swaggo/swag/cmd/swag@v1.16 fmt internal && \
+	go run github.com/swaggo/swag/cmd/swag@v1.16 init -g internal/app/api/app.go -p pascalcase --pd --parseDepth 1 -o ./api --ot go,json

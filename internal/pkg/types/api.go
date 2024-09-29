@@ -87,3 +87,29 @@ func (b ProductCreateBody) Validate() error {
 
 	return nil
 }
+
+type CustomerCreateBody struct {
+	FirstName string `json:"first_name"`
+	LastName  string `json:"last_name"`
+	Address   string `json:"address"`
+}
+
+func (b CustomerCreateBody) Validate() error {
+	if b.FirstName == "" || b.LastName == "" || b.Address == "" {
+		return fiber.ErrBadRequest
+	}
+
+	if len(b.FirstName) > 16 {
+		return fiber.ErrBadRequest
+	}
+
+	if len(b.LastName) > 16 {
+		return fiber.ErrBadRequest
+	}
+
+	if len(b.Address) > 100 {
+		return fiber.ErrBadRequest
+	}
+
+	return nil
+}

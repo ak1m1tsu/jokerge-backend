@@ -80,6 +80,15 @@ const docTemplate = `{
                 "summary": "создание нового клиента",
                 "parameters": [
                     {
+                        "description": "Тело запроса",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/github_com_ak1m1tsu_jokerge_internal_pkg_types.CustomerCreateBody"
+                        }
+                    },
+                    {
                         "type": "string",
                         "description": "ID запроса",
                         "name": "X-Request-ID",
@@ -91,7 +100,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/github_com_ak1m1tsu_jokerge_internal_pkg_types.APIResponse"
+                            "$ref": "#/definitions/github_com_ak1m1tsu_jokerge_internal_pkg_types.CustomerInfoResponse"
                         }
                     },
                     "400": {
@@ -396,7 +405,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/v1/product/": {
+        "/api/v1/product": {
             "post": {
                 "security": [
                     {
@@ -553,6 +562,20 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "github_com_ak1m1tsu_jokerge_internal_pkg_types.CustomerCreateBody": {
+            "type": "object",
+            "properties": {
+                "address": {
+                    "type": "string"
+                },
+                "first_name": {
+                    "type": "string"
+                },
+                "last_name": {
                     "type": "string"
                 }
             }

@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/ak1m1tsu/jokerge/internal/pkg/types"
+	"github.com/google/uuid"
 )
 
 // GetCustomerInfo возвращает информацию о клиенте и его заказах
@@ -29,4 +30,19 @@ func (s *Service) GetCustomers(ctx context.Context) ([]*types.Customer, error) {
 	}
 
 	return customers, nil
+}
+
+// CreateCustomer создает нового клиента
+func (s *Service) CreateCustomer(ctx context.Context, body types.CustomerCreateBody) (string, error) {
+	model := types.CustomerModel{
+		ID:        uuid.NewString(),
+		FirstName: body.FirstName,
+		LastName:  body.LastName,
+		Address:   body.Address,
+	}
+	if _, err := s.db.NewInsert().Model(&model).Exec(ctx); err != nil {
+		return "", err
+	}
+
+	return model.ID, nil
 }

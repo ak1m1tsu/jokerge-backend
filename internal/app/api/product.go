@@ -82,7 +82,7 @@ func (e *Env) ProductGet(ctx *fiber.Ctx) error {
 //	@Success	200				{object}	types.ProductInfoResponse
 //	@Failure	400				{object}	types.APIResponse
 //	@Failure	500				{object}	types.APIResponse
-//	@Router		/api/v1/product/ [post]
+//	@Router		/api/v1/product [post]
 func (e *Env) ProductCreate(ctx *fiber.Ctx) error {
 	var body types.ProductCreateBody
 	if err := ctx.BodyParser(&body); err != nil {
@@ -91,6 +91,7 @@ func (e *Env) ProductCreate(ctx *fiber.Ctx) error {
 	}
 
 	if err := body.Validate(); err != nil {
+		zlog.Ctx(ctx.UserContext()).Error().Err(err).Msg("invalid body request")
 		return err
 	}
 
@@ -98,6 +99,7 @@ func (e *Env) ProductCreate(ctx *fiber.Ctx) error {
 
 	id, err := e.Service().CreateProduct(ctx.UserContext(), body)
 	if err != nil {
+		zlog.Ctx(ctx.UserContext()).Error().Err(err).Msg("failed to create product")
 		return err
 	}
 

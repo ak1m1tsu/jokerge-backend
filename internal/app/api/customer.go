@@ -3,7 +3,7 @@ package api
 import (
 	"github.com/ak1m1tsu/jokerge/internal/pkg/types"
 	"github.com/gofiber/fiber/v2"
-	"github.com/rs/zerolog"
+	zlog "github.com/rs/zerolog"
 )
 
 // CustomerList возвращает список клиентов
@@ -19,7 +19,7 @@ import (
 func (e *Env) CustomerList(ctx *fiber.Ctx) error {
 	customers, err := e.Service().GetCustomers(ctx.UserContext())
 	if err != nil {
-		zerolog.Ctx(ctx.UserContext()).Error().Err(err).Msg("failed to get customer list")
+		zlog.Ctx(ctx.UserContext()).Error().Err(err).Msg("failed to get customer list")
 		return err
 	}
 
@@ -68,7 +68,7 @@ func (e *Env) CustomerGet(ctx *fiber.Ctx) error {
 
 	customer, err := e.Service().GetCustomerInfo(ctx.UserContext(), id)
 	if err != nil {
-		zerolog.Ctx(ctx.UserContext()).Error().Err(err).Msgf("failed to get customer by id %s", id)
+		zlog.Ctx(ctx.UserContext()).Error().Err(err).Msgf("failed to get customer by id %s", id)
 		return err
 	}
 
@@ -86,11 +86,37 @@ func (e *Env) CustomerGet(ctx *fiber.Ctx) error {
 //	@Security	BasicAuth
 //	@Accept		json
 //	@Produce	json
-//	@Param		X-Request-ID	header		string	true	"ID запроса"
-//	@Success	200				{object}	types.APIResponse
+//	@Param		body			body		types.CustomerCreateBody	true	"Тело запроса"
+//	@Param		X-Request-ID	header		string						true	"ID запроса"
+//	@Success	200				{object}	types.CustomerInfoResponse
 //	@Failure	400				{object}	types.APIResponse
 //	@Failure	500				{object}	types.APIResponse
 //	@Router		/api/v1/customer [post]
 func (e *Env) CustomerCreate(ctx *fiber.Ctx) error {
-	return e.OK(ctx)
+	var body types.CustomerCreateBody
+	if err := ctx.BodyParser(&body); err != nil {
+		zlog.Ctx(ctx.UserContext()).Error().Err(err).Msg("failed to parse request body")
+		return err
+	}
+
+	if err := body.Validate(); err != nil {
+		zlog.Ctx(ctx.UserContext()).Error().Err(err).Msg("invalid body request")
+		return err
+	}
+
+	zlog.Ctx(ctx.UserContext()).Info().Any("body", body).Msg("create new customer")
+
+	id, err := e.Service().CreateCustomer(ctx.UserContext(), body)
+	if err != nil {
+		zlog.Ctx(ctx.UserContext()).Error().Err(err).Msg("failed to create customer")
+		return err
+	}
+
+	return ctx.JSON(types.CustomerInfoResponse{
+		ID:        id,
+		FirstName: body.FirstName,
+		LastName:  body.LastName,
+		Address:   body.Address,
+		Orders:    make([]types.CustomerInfoOrderResponse, 0),
+	})
 }
