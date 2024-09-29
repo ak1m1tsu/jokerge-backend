@@ -389,6 +389,63 @@
                 }
             }
         },
+        "/api/v1/product/": {
+            "post": {
+                "security": [
+                    {
+                        "BasicAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "products"
+                ],
+                "summary": "создание нового продукта",
+                "parameters": [
+                    {
+                        "description": "Тело запроса",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/github_com_ak1m1tsu_jokerge_internal_pkg_types.ProductCreateBody"
+                        }
+                    },
+                    {
+                        "type": "string",
+                        "description": "ID запроса",
+                        "name": "X-Request-ID",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_ak1m1tsu_jokerge_internal_pkg_types.ProductInfoResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_ak1m1tsu_jokerge_internal_pkg_types.APIResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_ak1m1tsu_jokerge_internal_pkg_types.APIResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/product/{product_id}": {
             "get": {
                 "security": [
@@ -593,6 +650,20 @@
                 },
                 "status": {
                     "type": "string"
+                }
+            }
+        },
+        "github_com_ak1m1tsu_jokerge_internal_pkg_types.ProductCreateBody": {
+            "type": "object",
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "price": {
+                    "type": "integer"
                 }
             }
         },

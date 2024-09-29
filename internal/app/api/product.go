@@ -3,7 +3,7 @@ package api
 import (
 	"github.com/ak1m1tsu/jokerge/internal/pkg/types"
 	"github.com/gofiber/fiber/v2"
-	"github.com/rs/zerolog"
+	zlog "github.com/rs/zerolog"
 )
 
 // ProductList возвращает спиок продуктов
@@ -19,7 +19,7 @@ import (
 func (e *Env) ProductList(ctx *fiber.Ctx) error {
 	products, err := e.Service().GetProducts(ctx.UserContext())
 	if err != nil {
-		zerolog.Ctx(ctx.UserContext()).Error().Err(err).Msg("failed to get product list")
+		zlog.Ctx(ctx.UserContext()).Error().Err(err).Msg("failed to get product list")
 		return err
 	}
 
@@ -54,7 +54,7 @@ func (e *Env) ProductGet(ctx *fiber.Ctx) error {
 
 	product, err := e.Service().GetProductInfo(ctx.UserContext(), id)
 	if err != nil {
-		zerolog.Ctx(ctx.UserContext()).Error().Err(err).Msgf("failed to get product by id %s", id)
+		zlog.Ctx(ctx.UserContext()).Error().Err(err).Msgf("failed to get product by id %s", id)
 		return err
 	}
 
@@ -67,5 +67,44 @@ func (e *Env) ProductGet(ctx *fiber.Ctx) error {
 		Name:        product.Name,
 		Description: product.Description,
 		Price:       product.Price,
+	})
+}
+
+// ProductCreate обработчик создания нового продукта
+//
+//	@Summary	создание нового продукта
+//	@Tags		products
+//	@Security	BasicAuth
+//	@Accept		json
+//	@Produce	json
+//	@Param		body			body		types.ProductCreateBody	true	"Тело запроса"
+//	@Param		X-Request-ID	header		string					true	"ID запроса"
+//	@Success	200				{object}	types.ProductInfoResponse
+//	@Failure	400				{object}	types.APIResponse
+//	@Failure	500				{object}	types.APIResponse
+//	@Router		/api/v1/product/ [post]
+func (e *Env) ProductCreate(ctx *fiber.Ctx) error {
+	var body types.ProductCreateBody
+	if err := ctx.BodyParser(&body); err != nil {
+		zlog.Ctx(ctx.UserContext()).Error().Err(err).Msg("failed to parse request body")
+		return err
+	}
+
+	if err := body.Validate(); err != nil {
+		return err
+	}
+
+	zlog.Ctx(ctx.UserContext()).Info().Any("body", body).Msg("create new product")
+
+	id, err := e.Service().CreateProduct(ctx.UserContext(), body)
+	if err != nil {
+		return err
+	}
+
+	return ctx.JSON(types.ProductInfoResponse{
+		ID:          id,
+		Name:        body.Name,
+		Description: body.Description,
+		Price:       body.Price,
 	})
 }

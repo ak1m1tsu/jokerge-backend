@@ -74,6 +74,15 @@ definitions:
       status:
         type: string
     type: object
+  github_com_ak1m1tsu_jokerge_internal_pkg_types.ProductCreateBody:
+    properties:
+      description:
+        type: string
+      name:
+        type: string
+      price:
+        type: integer
+    type: object
   github_com_ak1m1tsu_jokerge_internal_pkg_types.ProductInfoResponse:
     properties:
       description:
@@ -352,6 +361,42 @@ paths:
       summary: обновление информации о заказе
       tags:
       - orders
+  /api/v1/product/:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Тело запроса
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/github_com_ak1m1tsu_jokerge_internal_pkg_types.ProductCreateBody'
+      - description: ID запроса
+        in: header
+        name: X-Request-ID
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_ak1m1tsu_jokerge_internal_pkg_types.ProductInfoResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/github_com_ak1m1tsu_jokerge_internal_pkg_types.APIResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/github_com_ak1m1tsu_jokerge_internal_pkg_types.APIResponse'
+      security:
+      - BasicAuth: []
+      summary: создание нового продукта
+      tags:
+      - products
   /api/v1/product/{product_id}:
     get:
       parameters:

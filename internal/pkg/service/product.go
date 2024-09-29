@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/ak1m1tsu/jokerge/internal/pkg/types"
+	"github.com/google/uuid"
 )
 
 func (s *Service) GetProducts(ctx context.Context) ([]*types.Product, error) {
@@ -27,4 +28,19 @@ func (s *Service) GetProductInfo(ctx context.Context, id string) (*types.Product
 	}
 
 	return model.ToProduct(), nil
+}
+
+func (s *Service) CreateProduct(ctx context.Context, body types.ProductCreateBody) (string, error) {
+	model := types.ProductModel{
+		ID:          uuid.NewString(),
+		Name:        body.Name,
+		Description: body.Description,
+		Price:       body.Price,
+	}
+
+	if _, err := s.db.NewInsert().Model(&model).Exec(ctx); err != nil {
+		return "", err
+	}
+
+	return model.ID, nil
 }

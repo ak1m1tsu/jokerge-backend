@@ -97,6 +97,7 @@ func New() (*Env, error) {
 	v1.Route("/product", func(router fiber.Router) {
 		router.Get("/list", env.ProductList)
 		router.Get("/:id<guid>", env.ProductGet)
+		router.Post("/", env.ProductCreate)
 	})
 
 	return env, nil
@@ -271,6 +272,8 @@ func HandleError(ctx *fiber.Ctx, err error) error {
 	switch code {
 	case http.StatusMethodNotAllowed:
 		return ctx.Status(code).JSON(types.APIResponse{Error: "method not allowed"})
+	case http.StatusBadRequest:
+		return ctx.Status(code).JSON(types.APIResponse{Error: "bad request"})
 	case http.StatusNotFound:
 		return ctx.Status(code).JSON(types.APIResponse{Error: "not found"})
 	default:

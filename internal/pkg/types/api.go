@@ -1,5 +1,7 @@
 package types
 
+import "github.com/gofiber/fiber/v2"
+
 type (
 	APIResponse struct {
 		Error   string `json:"error,omitempty"`
@@ -59,3 +61,29 @@ type (
 		Price       int    `json:"price"`
 	}
 )
+
+type ProductCreateBody struct {
+	Name        string `json:"name"`
+	Description string `json:"description,omitempty"`
+	Price       int    `json:"price"`
+}
+
+func (b ProductCreateBody) Validate() error {
+	if b.Name == "" {
+		return fiber.ErrBadRequest
+	}
+
+	if len(b.Name) >= 20 {
+		return fiber.ErrBadRequest
+	}
+
+	if b.Description != "" && len(b.Description) > 100 {
+		return fiber.ErrBadRequest
+	}
+
+	if b.Price <= 0 {
+		return fiber.ErrBadRequest
+	}
+
+	return nil
+}
