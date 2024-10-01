@@ -7,6 +7,7 @@ import (
 	"github.com/google/uuid"
 )
 
+// GetProducts возвращает список продуктов
 func (s *Service) GetProducts(ctx context.Context) ([]*types.Product, error) {
 	var model []types.ProductModel
 	if err := s.db.NewSelect().Model(&model).Scan(ctx); err != nil {
@@ -21,6 +22,7 @@ func (s *Service) GetProducts(ctx context.Context) ([]*types.Product, error) {
 	return products, nil
 }
 
+// GetProductInfo возварщает информацию о продукте
 func (s *Service) GetProductInfo(ctx context.Context, id string) (*types.Product, error) {
 	model := new(types.ProductModel)
 	if err := s.db.NewSelect().Model(model).Where("p.id = ?", id).Scan(ctx); err != nil {
@@ -30,6 +32,7 @@ func (s *Service) GetProductInfo(ctx context.Context, id string) (*types.Product
 	return model.ToProduct(), nil
 }
 
+// CreateProduct создает новый продукт
 func (s *Service) CreateProduct(ctx context.Context, body types.ProductCreateBody) (string, error) {
 	model := types.ProductModel{
 		ID:          uuid.NewString(),
@@ -45,6 +48,7 @@ func (s *Service) CreateProduct(ctx context.Context, body types.ProductCreateBod
 	return model.ID, nil
 }
 
+// UpdateProduct обновляет продукт
 func (s *Service) UpdateProduct(ctx context.Context, body types.ProductUpdateBody) error {
 	model := types.ProductModel{
 		ID:          body.ID,
