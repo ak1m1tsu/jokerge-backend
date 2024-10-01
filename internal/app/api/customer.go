@@ -38,7 +38,7 @@ func (e *Env) CustomerList(ctx *fiber.Ctx) error {
 			converted.Orders = append(converted.Orders, types.CustomerInfoOrderResponse{
 				ID:        o.ID,
 				Status:    o.Status.String(),
-				Price:     o.CalculatePrice(),
+				Price:     o.Price,
 				CreatedAt: o.CreatedAt.String(),
 			})
 		}
@@ -76,7 +76,24 @@ func (e *Env) CustomerGet(ctx *fiber.Ctx) error {
 		return e.NotFound(ctx)
 	}
 
-	return ctx.JSON(customer)
+	response := types.CustomerInfoResponse{
+		ID:        customer.ID,
+		FirstName: customer.FirstName,
+		LastName:  customer.LastName,
+		Address:   customer.Address,
+		Orders:    make([]types.CustomerInfoOrderResponse, 0),
+	}
+
+	for _, o := range customer.Orders {
+		response.Orders = append(response.Orders, types.CustomerInfoOrderResponse{
+			ID:        o.ID,
+			Status:    o.Status.String(),
+			Price:     o.Price,
+			CreatedAt: o.CreatedAt.String(),
+		})
+	}
+
+	return ctx.JSON(response)
 }
 
 // CustomerCreate создает клиента
@@ -119,4 +136,38 @@ func (e *Env) CustomerCreate(ctx *fiber.Ctx) error {
 		Address:   body.Address,
 		Orders:    make([]types.CustomerInfoOrderResponse, 0),
 	})
+}
+
+// CustomerUpdate обработчик обновления информации о клиенте
+//
+//	@Summary	обновление информации о клиенте
+//	@Tags		customers
+//	@Security	BasicAuth
+//	@Accept		json
+//	@Produce	json
+//	@Param		body			body		types.CustomerUpdateBody	true	"Тело запроса"
+//	@Param		X-Request-ID	header		string						true	"ID запроса"
+//	@Success	200				{object}	types.APIResponse
+//	@Failure	400				{object}	types.APIResponse
+//	@Failure	404				{object}	types.APIResponse
+//	@Failure	500				{object}	types.APIResponse
+//	@Router		/api/v1/customer/update [post]
+func (e *Env) CustomerUpdate(ctx *fiber.Ctx) error {
+	var body types.CustomerUpdateBody
+	if err := ctx.BodyParser(&body); err != nil {
+		zlog.Ctx(ctx.UserContext()).Error().Err(err).Msg("failed to parse request body")
+		return err
+	}
+
+	if err := body.Validate(); err != nil {
+		zlog.Ctx(ctx.UserContext()).Error().Any("body", body).Err(err).Msg("invalid body request")
+		return err
+	}
+
+	if err := e.Service().UpdateCustomer(ctx.UserContext(), body); err != nil {
+		zlog.Ctx(ctx.UserContext()).Error().Err(err).Msg("failed to update customer")
+		return err
+	}
+
+	return e.OK(ctx)
 }

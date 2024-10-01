@@ -98,6 +98,7 @@ func New() (*Env, error) {
 		router.Get("/list", env.CustomerList)
 		router.Get("/:id<guid>", env.CustomerGet)
 		router.Post("/", env.CustomerCreate)
+		router.Post("/update", env.CustomerUpdate)
 	})
 
 	v1.Route("/product", func(router fiber.Router) {
@@ -222,7 +223,7 @@ func (e *Env) SeedData() error {
 			ID:         2,
 			CustomerID: "c22946d7-991e-44a1-b0dc-6b775a34664c",
 			Status:     types.OrderStatusCanceled,
-			Price:      0,
+			Price:      150,
 			CreatedAt:  time.Now().Unix(),
 		},
 	}

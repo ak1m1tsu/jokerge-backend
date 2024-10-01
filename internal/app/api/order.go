@@ -29,7 +29,7 @@ func (e *Env) OrderList(ctx *fiber.Ctx) error {
 		converted := types.OrderInfoResponse{
 			ID:        o.ID,
 			Status:    o.Status.String(),
-			Price:     o.CalculatePrice(),
+			Price:     o.Price,
 			CreatedAt: o.CreatedAt.String(),
 			Customer: types.OrderInfoCustomerResponse{
 				ID:        o.Customer.ID,
@@ -87,7 +87,7 @@ func (e *Env) OrderGet(ctx *fiber.Ctx) error {
 	response := types.OrderInfoResponse{
 		ID:        order.ID,
 		Status:    order.Status.String(),
-		Price:     order.CalculatePrice(),
+		Price:     order.Price,
 		CreatedAt: order.CreatedAt.String(),
 		Customer: types.OrderInfoCustomerResponse{
 			ID:        order.Customer.ID,

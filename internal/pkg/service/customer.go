@@ -46,3 +46,20 @@ func (s *Service) CreateCustomer(ctx context.Context, body types.CustomerCreateB
 
 	return model.ID, nil
 }
+
+// UpdateCustomer обновляет клиента
+func (s *Service) UpdateCustomer(ctx context.Context, body types.CustomerUpdateBody) error {
+	model := types.CustomerModel{
+		ID:        body.ID,
+		FirstName: body.FirstName,
+		LastName:  body.LastName,
+		Address:   body.Address,
+	}
+
+	_, err := s.db.NewUpdate().Model(&model).OmitZero().WherePK().Exec(ctx)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}

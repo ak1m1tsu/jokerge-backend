@@ -147,3 +147,34 @@ func (b CustomerCreateBody) Validate() error {
 
 	return nil
 }
+
+type CustomerUpdateBody struct {
+	ID        string `json:"id"`
+	FirstName string `json:"first_name"`
+	LastName  string `json:"last_name"`
+	Address   string `json:"address"`
+}
+
+func (b CustomerUpdateBody) Validate() error {
+	if b.ID == "" {
+		return fiber.ErrBadRequest
+	}
+
+	if _, err := uuid.Parse(b.ID); err != nil {
+		return fiber.ErrBadRequest
+	}
+
+	if b.FirstName != "" && len(b.FirstName) > 16 {
+		return fiber.ErrBadRequest
+	}
+
+	if b.LastName != "" && len(b.LastName) > 16 {
+		return fiber.ErrBadRequest
+	}
+
+	if b.Address != "" && len(b.Address) > 100 {
+		return fiber.ErrBadRequest
+	}
+
+	return nil
+}

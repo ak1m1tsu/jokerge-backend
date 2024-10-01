@@ -153,6 +153,69 @@
                 }
             }
         },
+        "/api/v1/customer/update": {
+            "post": {
+                "security": [
+                    {
+                        "BasicAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "customers"
+                ],
+                "summary": "обновление информации о клиенте",
+                "parameters": [
+                    {
+                        "description": "Тело запроса",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/github_com_ak1m1tsu_jokerge_internal_pkg_types.CustomerUpdateBody"
+                        }
+                    },
+                    {
+                        "type": "string",
+                        "description": "ID запроса",
+                        "name": "X-Request-ID",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_ak1m1tsu_jokerge_internal_pkg_types.APIResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_ak1m1tsu_jokerge_internal_pkg_types.APIResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_ak1m1tsu_jokerge_internal_pkg_types.APIResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_ak1m1tsu_jokerge_internal_pkg_types.APIResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/customer/{customer_id}": {
             "get": {
                 "security": [
@@ -673,6 +736,23 @@
                     "items": {
                         "$ref": "#/definitions/github_com_ak1m1tsu_jokerge_internal_pkg_types.CustomerInfoOrderResponse"
                     }
+                }
+            }
+        },
+        "github_com_ak1m1tsu_jokerge_internal_pkg_types.CustomerUpdateBody": {
+            "type": "object",
+            "properties": {
+                "address": {
+                    "type": "string"
+                },
+                "first_name": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "last_name": {
+                    "type": "string"
                 }
             }
         },
