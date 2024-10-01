@@ -297,6 +297,15 @@ const docTemplate = `{
                 "summary": "создаение заказа",
                 "parameters": [
                     {
+                        "description": "Тело запроса",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/github_com_ak1m1tsu_jokerge_internal_pkg_types.CreateOrderBody"
+                        }
+                    },
+                    {
                         "type": "string",
                         "description": "ID запроса",
                         "name": "X-Request-ID",
@@ -308,7 +317,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/github_com_ak1m1tsu_jokerge_internal_pkg_types.APIResponse"
+                            "$ref": "#/definitions/github_com_ak1m1tsu_jokerge_internal_pkg_types.OrderCreateResponse"
                         }
                     },
                     "400": {
@@ -692,6 +701,20 @@ const docTemplate = `{
                 }
             }
         },
+        "github_com_ak1m1tsu_jokerge_internal_pkg_types.CreateOrderBody": {
+            "type": "object",
+            "properties": {
+                "customer_id": {
+                    "type": "string"
+                },
+                "products": {
+                    "type": "object",
+                    "additionalProperties": {
+                        "type": "integer"
+                    }
+                }
+            }
+        },
         "github_com_ak1m1tsu_jokerge_internal_pkg_types.CustomerCreateBody": {
             "type": "object",
             "properties": {
@@ -760,6 +783,14 @@ const docTemplate = `{
                 },
                 "last_name": {
                     "type": "string"
+                }
+            }
+        },
+        "github_com_ak1m1tsu_jokerge_internal_pkg_types.OrderCreateResponse": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
                 }
             }
         },

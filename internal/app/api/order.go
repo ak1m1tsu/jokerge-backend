@@ -3,7 +3,7 @@ package api
 import (
 	"github.com/ak1m1tsu/jokerge/internal/pkg/types"
 	"github.com/gofiber/fiber/v2"
-	"github.com/rs/zerolog"
+	zlog "github.com/rs/zerolog"
 )
 
 // OrderList возвращает список заказов
@@ -19,7 +19,7 @@ import (
 func (e *Env) OrderList(ctx *fiber.Ctx) error {
 	orders, err := e.Service().GetOrders(ctx.UserContext())
 	if err != nil {
-		zerolog.Ctx(ctx.UserContext()).Error().Err(err).Msg("failed to get orders")
+		zlog.Ctx(ctx.UserContext()).Error().Err(err).Msg("failed to get orders")
 		return err
 	}
 
@@ -76,7 +76,7 @@ func (e *Env) OrderGet(ctx *fiber.Ctx) error {
 
 	order, err := e.Service().GetOrderInfo(ctx.UserContext(), id)
 	if err != nil {
-		zerolog.Ctx(ctx.UserContext()).Error().Err(err).Msgf("failed to get order by id %d", id)
+		zlog.Ctx(ctx.UserContext()).Error().Err(err).Msgf("failed to get order by id %d", id)
 		return err
 	}
 
@@ -118,13 +118,33 @@ func (e *Env) OrderGet(ctx *fiber.Ctx) error {
 //	@Security	BasicAuth
 //	@Accept		json
 //	@Produce	json
-//	@Param		X-Request-ID	header		string	true	"ID запроса"
-//	@Success	200				{object}	types.APIResponse
+//	@Param		body			body		types.CreateOrderBody	true	"Тело запроса"
+//	@Param		X-Request-ID	header		string					true	"ID запроса"
+//	@Success	200				{object}	types.OrderCreateResponse
 //	@Failure	400				{object}	types.APIResponse
 //	@Failure	500				{object}	types.APIResponse
 //	@Router		/api/v1/order [post]
 func (e *Env) OrderCreate(ctx *fiber.Ctx) error {
-	return e.OK(ctx)
+	var body types.CreateOrderBody
+	if err := ctx.BodyParser(&body); err != nil {
+		zlog.Ctx(ctx.UserContext()).Error().Err(err).Msg("failed to parse request body")
+		return err
+	}
+
+	if err := body.Validate(); err != nil {
+		zlog.Ctx(ctx.UserContext()).Error().Err(err).Any("body", body).Msg("invalid body request")
+		return err
+	}
+
+	id, err := e.Service().CreateOrder(ctx.UserContext(), body)
+	if err != nil {
+		zlog.Ctx(ctx.UserContext()).Error().Err(err).Msg("failed to create a new order")
+		return err
+	}
+
+	return ctx.JSON(types.OrderCreateResponse{
+		ID: id,
+	})
 }
 
 // OrderUpdate обновление инфорамации заказа

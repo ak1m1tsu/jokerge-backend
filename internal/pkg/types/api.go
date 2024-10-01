@@ -27,6 +27,9 @@ type (
 		Customer  OrderInfoCustomerResponse  `json:"customer"`
 		Products  []OrderInfoProductResponse `json:"products"`
 	}
+	OrderCreateResponse struct {
+		ID int `json:"id"`
+	}
 	OrderInfoCustomerResponse struct {
 		ID        string `json:"id"`
 		FirstName string `json:"first_name"`
@@ -173,6 +176,38 @@ func (b CustomerUpdateBody) Validate() error {
 	}
 
 	if b.Address != "" && len(b.Address) > 100 {
+		return fiber.ErrBadRequest
+	}
+
+	return nil
+}
+
+type CreateOrderBody struct {
+	CustomerID string         `json:"customer_id"`
+	Products   map[string]int `json:"products"`
+}
+
+func (b CreateOrderBody) Validate() error {
+	if b.CustomerID == "" {
+		return fiber.ErrBadRequest
+	}
+
+	if _, err := uuid.Parse(b.CustomerID); err != nil {
+		return fiber.ErrBadRequest
+	}
+
+	for id, count := range b.Products {
+		if _, err := uuid.Parse(id); err != nil {
+			delete(b.Products, id)
+			continue
+		}
+
+		if count <= 0 {
+			delete(b.Products, id)
+		}
+	}
+
+	if len(b.Products) == 0 {
 		return fiber.ErrBadRequest
 	}
 
