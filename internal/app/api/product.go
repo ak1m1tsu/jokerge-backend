@@ -15,7 +15,7 @@ import (
 //	@Param		X-Request-ID	header		string	true	"ID запроса"
 //	@Success	200				{object}	types.ProductListResponse
 //	@Failure	500				{object}	types.APIResponse
-//	@Router		/api/v1/produuct/list [get]
+//	@Router		/api/v1/product/list [get]
 func (e *Env) ProductList(ctx *fiber.Ctx) error {
 	products, err := e.Service().GetProducts(ctx.UserContext())
 	if err != nil {
@@ -109,4 +109,39 @@ func (e *Env) ProductCreate(ctx *fiber.Ctx) error {
 		Description: body.Description,
 		Price:       body.Price,
 	})
+}
+
+// ProductUpdate обработчик обновления информации о продукте
+//
+//	@Summary	обновление информации о продукте
+//	@Tags		products
+//	@Security	BasicAuth
+//	@Accept		json
+//	@Produce	json
+//	@Param		body			body		types.ProductUpdateBody	true	"Тело запроса"
+//	@Param		X-Request-ID	header		string					true	"ID запроса"
+//	@Success	200				{object}	types.APIResponse
+//	@Failure	400				{object}	types.APIResponse
+//	@Failure	404				{object}	types.APIResponse
+//	@Failure	500				{object}	types.APIResponse
+//	@Router		/api/v1/product/update [post]
+func (e *Env) ProductUpdate(ctx *fiber.Ctx) error {
+	var body types.ProductUpdateBody
+	if err := ctx.BodyParser(&body); err != nil {
+		zlog.Ctx(ctx.UserContext()).Error().Err(err).Msg("failed to parse request body")
+		return err
+	}
+
+	if err := body.Validate(); err != nil {
+		zlog.Ctx(ctx.UserContext()).Error().Err(err).Msg("invalid body request")
+		return err
+	}
+
+	zlog.Ctx(ctx.UserContext()).Info().Any("body", body).Msg("update a product")
+
+	if err := e.Service().UpdateProduct(ctx.UserContext(), body); err != nil {
+		return err
+	}
+
+	return e.OK(ctx)
 }

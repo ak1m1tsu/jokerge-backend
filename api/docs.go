@@ -462,6 +462,108 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/v1/product/list": {
+            "get": {
+                "security": [
+                    {
+                        "BasicAuth": []
+                    }
+                ],
+                "tags": [
+                    "products"
+                ],
+                "summary": "список продуктов",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "ID запроса",
+                        "name": "X-Request-ID",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/github_com_ak1m1tsu_jokerge_internal_pkg_types.ProductInfoResponse"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_ak1m1tsu_jokerge_internal_pkg_types.APIResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/product/update": {
+            "post": {
+                "security": [
+                    {
+                        "BasicAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "products"
+                ],
+                "summary": "обновление информации о продукте",
+                "parameters": [
+                    {
+                        "description": "Тело запроса",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/github_com_ak1m1tsu_jokerge_internal_pkg_types.ProductUpdateBody"
+                        }
+                    },
+                    {
+                        "type": "string",
+                        "description": "ID запроса",
+                        "name": "X-Request-ID",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_ak1m1tsu_jokerge_internal_pkg_types.APIResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_ak1m1tsu_jokerge_internal_pkg_types.APIResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_ak1m1tsu_jokerge_internal_pkg_types.APIResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_ak1m1tsu_jokerge_internal_pkg_types.APIResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/product/{product_id}": {
             "get": {
                 "security": [
@@ -503,45 +605,6 @@ const docTemplate = `{
                         "description": "Not Found",
                         "schema": {
                             "$ref": "#/definitions/github_com_ak1m1tsu_jokerge_internal_pkg_types.APIResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/github_com_ak1m1tsu_jokerge_internal_pkg_types.APIResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/api/v1/produuct/list": {
-            "get": {
-                "security": [
-                    {
-                        "BasicAuth": []
-                    }
-                ],
-                "tags": [
-                    "products"
-                ],
-                "summary": "список продуктов",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "ID запроса",
-                        "name": "X-Request-ID",
-                        "in": "header",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/github_com_ak1m1tsu_jokerge_internal_pkg_types.ProductInfoResponse"
-                            }
                         }
                     },
                     "500": {
@@ -698,6 +761,23 @@ const docTemplate = `{
             }
         },
         "github_com_ak1m1tsu_jokerge_internal_pkg_types.ProductInfoResponse": {
+            "type": "object",
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "price": {
+                    "type": "integer"
+                }
+            }
+        },
+        "github_com_ak1m1tsu_jokerge_internal_pkg_types.ProductUpdateBody": {
             "type": "object",
             "properties": {
                 "description": {

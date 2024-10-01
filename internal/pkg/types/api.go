@@ -1,6 +1,9 @@
 package types
 
-import "github.com/gofiber/fiber/v2"
+import (
+	"github.com/gofiber/fiber/v2"
+	"github.com/google/uuid"
+)
 
 type (
 	APIResponse struct {
@@ -64,7 +67,7 @@ type (
 
 type ProductCreateBody struct {
 	Name        string `json:"name"`
-	Description string `json:"description,omitempty"`
+	Description string `json:"description"`
 	Price       int    `json:"price"`
 }
 
@@ -83,6 +86,37 @@ func (b ProductCreateBody) Validate() error {
 
 	if b.Price <= 0 {
 		return fiber.ErrBadRequest
+	}
+
+	return nil
+}
+
+type ProductUpdateBody struct {
+	ID          string `json:"id"`
+	Name        string `json:"name"`
+	Description string `json:"description"`
+	Price       int    `json:"price"`
+}
+
+func (b ProductUpdateBody) Validate() error {
+	if b.ID == "" {
+		return fiber.ErrBadRequest
+	}
+
+	if _, err := uuid.Parse(b.ID); err != nil {
+		return fiber.ErrBadRequest
+	}
+
+	if b.Name != "" && len(b.Name) >= 20 {
+		return fiber.ErrBadRequest
+	}
+
+	if b.Description != "" && len(b.Description) > 100 {
+		return fiber.ErrBadRequest
+	}
+
+	if b.Price < 0 {
+		return fiber.ErrBadGateway
 	}
 
 	return nil

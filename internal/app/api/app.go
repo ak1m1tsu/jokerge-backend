@@ -15,6 +15,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/basicauth"
 	"github.com/gofiber/fiber/v2/middleware/cors"
+	"github.com/gofiber/fiber/v2/middleware/redirect"
 	"github.com/gofiber/swagger"
 	"github.com/google/uuid"
 	"github.com/rs/zerolog/log"
@@ -59,6 +60,11 @@ func New() (*Env, error) {
 		return nil, err
 	}
 
+	env.app.Use(redirect.New(redirect.Config{
+		Rules: map[string]string{
+			"/": "/swagger",
+		},
+	}))
 	env.app.Get("/swagger/*", swagger.New(swagger.Config{
 		Title: "Jokerge API",
 	}))
@@ -98,6 +104,7 @@ func New() (*Env, error) {
 		router.Get("/list", env.ProductList)
 		router.Get("/:id<guid>", env.ProductGet)
 		router.Post("/", env.ProductCreate)
+		router.Post("/update", env.ProductUpdate)
 	})
 
 	return env, nil

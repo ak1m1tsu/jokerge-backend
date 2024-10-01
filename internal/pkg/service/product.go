@@ -44,3 +44,19 @@ func (s *Service) CreateProduct(ctx context.Context, body types.ProductCreateBod
 
 	return model.ID, nil
 }
+
+func (s *Service) UpdateProduct(ctx context.Context, body types.ProductUpdateBody) error {
+	model := types.ProductModel{
+		ID:          body.ID,
+		Name:        body.Name,
+		Description: body.Description,
+		Price:       body.Price,
+	}
+
+	_, err := s.db.NewUpdate().Model(&model).OmitZero().WherePK().Exec(ctx)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
